@@ -141,7 +141,6 @@ public class FormAddAnimal extends JPanel {
                 double weight;
                 if(!weightInformation.isEmpty()) weight = Double.parseDouble(weightInformation);
                 else weight = 1;
-                Date arrivalDate = new Date();
                 String nickName = nickNameField.getText();
                 if(nickNameField.getText().isEmpty()){
                     nickName = "";
@@ -191,9 +190,5 @@ public class FormAddAnimal extends JPanel {
 
         add(formPanel, BorderLayout.CENTER);
     }
-
-
-
-
 }
 
