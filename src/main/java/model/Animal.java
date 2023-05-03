@@ -37,4 +37,36 @@ public class Animal {
     public String toString(){
         return this.code + " " + this.name;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Gender getSex() {
+        return sex;
+    }
+
+    public Boolean getDangerous() {
+        return isDangerous;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public Date getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public String getBreed() {
+        return breed;
+    }
 }

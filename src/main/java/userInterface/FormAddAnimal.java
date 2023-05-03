@@ -1,7 +1,9 @@
 package userInterface;
 
+import Exceptions.DataException;
 import model.*;
 import controller.*;
+import Exceptions.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,9 +18,11 @@ public class FormAddAnimal extends JPanel {
     private JComboBox<String> speciesCombo;
     private JRadioButton sexMaleButton, sexFemaleButton;
     private JButton submitButton, cancelButton;
+    private ApplicationController controller;
 
 
-    public FormAddAnimal() {
+    public FormAddAnimal()  {
+        controller = new ApplicationController();
         setLayout(new BorderLayout());
 
         JPanel formPanel = new JPanel(new GridLayout(0, 2));
@@ -168,7 +172,15 @@ public class FormAddAnimal extends JPanel {
                     }else {
                         newAnimal = new Animal(code,name,sex,isDangerous,weight,breed,nickName);
                     }
-                    ApplicationController.addAnimal(newAnimal);
+
+                    try {
+                        controller.addAnimal(newAnimal);
+                    }
+                    catch (AddAnimalException exception){
+                        throw new AddAnimalException(exception.getMessage());
+                    } catch (Exception e){
+                        throw new
+                    }
 
 
                     // Effacer les champs

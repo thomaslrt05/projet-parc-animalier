@@ -1,11 +1,18 @@
 package controller;
-
+import Exceptions.AddAnimalException;
+import Exceptions.DataException;
+import business.*;
 import model.Animal;
 
 public class ApplicationController {
 
-    public static void addAnimal(Animal animal){
-        System.out.println(animal);
+    private Manager manager;
+
+    public ApplicationController()  {
+        this.manager = new Manager();
     }
 
+    public void addAnimal(Animal animal) throws AddAnimalException{
+        manager.addAnimal(animal);
+    }
 }
