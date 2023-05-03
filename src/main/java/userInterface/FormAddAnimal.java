@@ -177,10 +177,8 @@ public class FormAddAnimal extends JPanel {
                         controller.addAnimal(newAnimal);
                     }
                     catch (AddAnimalException exception){
-                        throw new AddAnimalException(exception.getMessage());
-                    } catch (Exception e){
-                        throw new
-                    }
+                        JOptionPane.showMessageDialog(null,exception.getMessage(),"erreur",JOptionPane.ERROR_MESSAGE);
+                    };
 
 
                     // Effacer les champs

@@ -3,11 +3,10 @@ import model.*;
 import Exceptions.*;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DBAccess {
+public class DBAccess implements DaoAccess{
     private Connection connection;
     public DBAccess()  {
         this.connection = SingletonConnexion.getInstance();
@@ -39,15 +38,9 @@ public class DBAccess {
             preparedStatement.setString(8, animal.getBreed());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            // TODO oui
+            String message = "Erreur lors de l'ajout de l'animal";
             throw new AddAnimalException(e.getMessage());
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 

@@ -79,16 +79,11 @@ public class MainJFrame extends JFrame implements ActionListener {
         if (e.getActionCommand().equals("Quitter")) {
             System.exit(0);
         } else if (e.getActionCommand().equals("Inscription")) {
-            try{
                 FormAddAnimal formAddAnimal = new FormAddAnimal();
                 panel.removeAll();
                 panel.setLayout(new BorderLayout());
                 panel.add(formAddAnimal,BorderLayout.CENTER);
                 panel.revalidate();
-            }catch (DataException exception){
-                throw new DataException(exception.getMessage());
-            }
-
         } else if (e.getActionCommand().equals("Par espèce")) {
 
         } else if (e.getActionCommand().equals("Par fonction")) {

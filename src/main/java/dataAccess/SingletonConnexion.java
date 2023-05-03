@@ -8,23 +8,20 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class SingletonConnexion {
-    private static Connection connection;
+    private static Connection uniqueInstance;
 
-    private SingletonConnexion() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/parc-animalier",
-                "root",
-                "rootroot2023.");
-    }
+    private SingletonConnexion(){}
 
-    public static Connection getInstance() throws DataException {
-        if(connection == null){
+    public static Connection getInstance() {
+        if(uniqueInstance == null){
             try {
-                new SingletonConnexion();
+                uniqueInstance = DriverManager.getConnection("jdbc:mysql://localhost:3306/library", "Amélie", "1235");
+
             } catch (SQLException e) {
-                throw new DataException(e.getMessage());
+                e.printStackTrace();
             }
         }
-        return connection;
+        return uniqueInstance;
     }
 }
 

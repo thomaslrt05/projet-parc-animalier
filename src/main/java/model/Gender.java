@@ -1,7 +1,7 @@
 package model;
 
 public enum Gender {
-    M("Male"), F("Female");
+    M("M"), F("F");
 
     private String label;
 
