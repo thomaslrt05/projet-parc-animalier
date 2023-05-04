@@ -4,7 +4,11 @@ import Exceptions.AddAnimalException;
 import model.*;
 import Exceptions.*;
 
+import java.util.ArrayList;
+
 public interface DaoAccess {
 
-    public default void addAnimal(Animal animal) throws AddAnimalException {}
+    void addAnimal(Animal animal) throws AddAnimalException;
+    ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException;
+
 }

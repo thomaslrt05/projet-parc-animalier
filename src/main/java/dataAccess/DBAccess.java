@@ -4,7 +4,10 @@ import Exceptions.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.sql.Date;
 
 public class DBAccess implements DaoAccess{
     private Connection connection;
@@ -12,14 +15,6 @@ public class DBAccess implements DaoAccess{
         this.connection = SingletonConnexion.getInstance();
     }
 
-    public void closeConnection() throws DataException {
-        try {
-            if (connection != null)
-                connection.close();
-        } catch (SQLException exception) {
-            throw new DataException(exception.getMessage());
-        }
-    }
 
     public void addAnimal(Animal animal) throws AddAnimalException {
         String sqlInstruction = "insert into animal (code, name, sex, isDangerous, weight, arrivalDate, nickName, breed) values (?,?,?,?,?,?,?,?)";
@@ -38,10 +33,30 @@ public class DBAccess implements DaoAccess{
             preparedStatement.setString(8, animal.getBreed());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            // TODO oui
             String message = "Erreur lors de l'ajout de l'animal";
-            throw new AddAnimalException(e.getMessage());
+            throw new AddAnimalException(message);
         }
+    }
+
+    public ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException {
+        ArrayList<CareSheetResearch> allData = new ArrayList<CareSheetResearch>();
+        try {
+            String sqlInstruction = "SELECT c.label \"careSheet\", a.name, a.code \"codeAnimal\" , b.label \"breedLabel\", c.date FROM library.caresheet c LEFT JOIN library.animal a ON c.animal = a.code LEFT JOIN library.breed b ON a.breed = b.id LEFT JOIN library.species s ON b.specification = s.id WHERE s.id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, species);
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    CareSheetResearch search = new CareSheetResearch(data.getString("caresheet"), data.getString("name"), data.getString("codeAnimal"), data.getString("breedLabel"), data.getDate("date"));
+                    allData.add(search);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la recherche";
+            throw new CareSheetResearchException(message);
+        }
+        return allData;
     }
 
 }

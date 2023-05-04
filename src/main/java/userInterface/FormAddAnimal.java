@@ -1,24 +1,26 @@
 package userInterface;
 
-import Exceptions.DataException;
 import model.*;
 import controller.*;
 import Exceptions.*;
 
 import javax.swing.*;
+import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
 public class FormAddAnimal extends JPanel {
-    private JLabel codeLabel, nameLabel, sexLabel, weightLabel, nickNameLabel, speciesLabel,isDangerousLabel;
+    private JLabel codeLabel, nameLabel, sexLabel, weightLabel, nickNameLabel, speciesLabel,isDangerousLabel,arrivalDate;
     private JTextField codeField, nameField, weightField, nickNameField;
     private JCheckBox isDangerousBox;
     private JComboBox<String> speciesCombo;
     private JRadioButton sexMaleButton, sexFemaleButton;
     private JButton submitButton, cancelButton;
     private ApplicationController controller;
+    private JSpinner spinner;
+    private SpinnerDateModel model;
 
 
     public FormAddAnimal()  {
@@ -38,7 +40,20 @@ public class FormAddAnimal extends JPanel {
         formPanel.add(nameLabel);
         formPanel.add(nameField);
 
+        nickNameLabel = new JLabel("Surnom :");
+        nickNameField = new JTextField(20);
+        formPanel.add(nickNameLabel);
+        formPanel.add(nickNameField);
 
+        arrivalDate = new JLabel("Date d'arrivé : ");
+        model = new SpinnerDateModel();
+        spinner = new JSpinner(model);
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "dd.MM.yyyy");
+        DateFormatter formatter = (DateFormatter)editor.getTextField().getFormatter();
+        formatter.setAllowsInvalid(false);
+        formatter.setOverwriteMode(true);
+        formPanel.add(arrivalDate);
+        formPanel.add(spinner);
 
         sexMaleButton = new JRadioButton("Mâle");
         sexFemaleButton = new JRadioButton("Female");
@@ -74,10 +89,7 @@ public class FormAddAnimal extends JPanel {
         formPanel.add(speciesLabel);
         formPanel.add(speciesCombo);
 
-        nickNameLabel = new JLabel("Surnom :");
-        nickNameField = new JTextField(20);
-        formPanel.add(nickNameLabel);
-        formPanel.add(nickNameField);
+
 
         submitButton = new JButton("Ajouter");
         cancelButton = new JButton("Annuler");
@@ -142,63 +154,83 @@ public class FormAddAnimal extends JPanel {
                 }
                 Boolean isDangerous = isDangerousBox.isSelected();
                 String weightInformation = weightField.getText();
-                double weight;
-                if(!weightInformation.isEmpty()) weight = Double.parseDouble(weightInformation);
-                else weight = 1;
-                Date arrivalDate = new Date();
+                Date arrivalDate = model.getDate();
                 String nickName = nickNameField.getText();
                 if(nickNameField.getText().isEmpty()){
                     nickName = "";
                 }
-                try{
-                    if (name.length() > 20 || code.isEmpty()) {
-                        throw new IllegalArgumentException("Le code est vide.");
-                    }
-                    if (name.length() > 20 || name.isEmpty()) {
-                        throw new IllegalArgumentException("Le nom doit contenir entre 1 et 20 caractères.");
-                    }
-                    if (weight < 0) {
-                        throw new IllegalArgumentException("Le poids doit être positif.");
-                    }
 
+                Boolean errorDetected = false;
+                try {
                     // Vérifier doublon
                     //if (ApplicationController.getInstance().getAnimalByCode(code) != null) {
-                      //  throw new IllegalArgumentException("Le code existe déjà.");
+                    //    throw new IllegalArgumentException("Le code existe déjà.");
+                    //errorDetected = true;
                     //}
 
+                    if (code.length() > 20 || code.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
+                        errorDetected = true;
+                    }
+
+                    if (name.length() > 20 || name.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
+                        errorDetected = true;
+                    }
+
+                    if (!nickName.isEmpty()){
+                        if (nickName.length() > 20) {
+                            JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
+                            errorDetected = true;
+                        }
+                    }
+
+                    if (!weightInformation.matches("\\d+")) {
+                        JOptionPane.showMessageDialog(null, "Le champ poids doit contenir seulement des chiffres.","Erreur",JOptionPane.ERROR_MESSAGE);
+                        errorDetected = true;
+                    }
+                    double weight = 0;
+
+                    if(weightInformation.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,"Le poids ne doit pas être vide","Erreur",JOptionPane.ERROR_MESSAGE);
+                        errorDetected = true;
+                    } else {
+                        weight = Double.parseDouble(weightInformation);
+                    }
+
+                    if (weight < 0) {
+                        JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
+                        errorDetected = true;
+                    }
+
                     Animal newAnimal;
+
                     if(nickName.isEmpty()){
-                        newAnimal = new Animal(code,name,sex,isDangerous,weight,breed);
-                    }else {
-                        newAnimal = new Animal(code,name,sex,isDangerous,weight,breed,nickName);
+                        newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed);
+                    } else {
+                        newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
                     }
 
-                    try {
-                        controller.addAnimal(newAnimal);
+                    if(!errorDetected){
+                        try {
+                            controller.addAnimal(newAnimal);
+                            codeField.setText("");
+                            nameField.setText("");
+                            weightField.setText("");
+                            sexFemaleButton.setSelected(false);
+                            sexMaleButton.setSelected(true);
+                            nickNameField.setText("");
+                            revalidate();
+                        }
+                        catch (AddAnimalException exception){
+                            JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                        }
                     }
-                    catch (AddAnimalException exception){
-                        JOptionPane.showMessageDialog(null,exception.getMessage(),"erreur",JOptionPane.ERROR_MESSAGE);
-                    };
-
-
-                    // Effacer les champs
-                    codeField.setText("");
-                    nameField.setText("");
-                    weightField.setText("");
-                    sexFemaleButton.setSelected(false);
-                    sexMaleButton.setSelected(true);
-                    nickNameField.setText("");
-                    revalidate();
-                }
-                catch (IllegalArgumentException ex){
+                } catch (IllegalArgumentException ex){
                     JOptionPane.showMessageDialog(formPanel, ex.getMessage(), "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
                 }
-
-
             }
         });
-
-
         add(formPanel, BorderLayout.CENTER);
     }
 

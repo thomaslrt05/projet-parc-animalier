@@ -12,4 +12,20 @@ public class RemarkByFonction {
         this.label = label;
         this.description = description;
     }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

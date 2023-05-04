@@ -13,4 +13,15 @@ public class TreatmentByMedicine {
         this.description = description;
     }
 
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

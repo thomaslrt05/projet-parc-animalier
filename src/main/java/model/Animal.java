@@ -12,18 +12,18 @@ public class Animal {
     private String nickName;
     private String breed;
 
-    public Animal(String code, String name, Gender sex, Boolean isDangerous, double weight,String breed) {
+    public Animal(String code, String name,Date date, Gender sex, Boolean isDangerous, double weight,String breed) {
         this.code = code;
         this.name = name;
         this.sex = sex;
         this.isDangerous = isDangerous;
         this.weight = weight;
         this.breed = breed;
-        this.arrivalDate = new Date();
+        this.arrivalDate = date;
     }
 
 
-    public Animal(String code, String name, Gender sex, Boolean isDangerous, double weight,String breed, String nickName) {
+    public Animal(String code, String name,Date date, Gender sex, Boolean isDangerous, double weight,String breed, String nickName) {
         this.code = code;
         this.name = name;
         this.sex = sex;
@@ -31,7 +31,7 @@ public class Animal {
         this.weight = weight;
         this.nickName = nickName;
         this.breed = breed;
-        this.arrivalDate = new Date();
+        this.arrivalDate = date;
     }
 
     public String toString(){

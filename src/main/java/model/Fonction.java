@@ -11,5 +11,12 @@ public class Fonction {
         this.label = label;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    @Override
+    public String toString() {
+        return  label +"("+id+")";
+    }
 }
