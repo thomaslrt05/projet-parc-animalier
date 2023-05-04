@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public interface DaoAccess {
 
-    void addAnimal(Animal animal) throws AddAnimalException;
-    ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException;
+    public void addAnimal(Animal animal) throws AddAnimalException;
+    public ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException;
 
 }
