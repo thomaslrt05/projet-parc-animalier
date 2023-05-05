@@ -126,7 +126,8 @@ public class DBAccess implements DaoAccess{
 
     public boolean animalExists(String code) throws animalExistsException{
         try {
-            String sqlInstruction = "SELECT * FROM library.animal a WHERE a.code = 'b';";
+            String sqlInstruction = "SELECT * FROM library.animal a WHERE a.code = ?;";
+            preparedStatement.setString(1, code);
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             ResultSet data = preparedStatement.executeQuery();
             return !data.wasNull();
