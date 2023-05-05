@@ -124,4 +124,15 @@ public class DBAccess implements DaoAccess{
         return listOfFonctions;
     }
 
+    public boolean animalExists(String code) throws animalExistsException{
+        try {
+            String sqlInstruction = "SELECT * FROM library.animal a WHERE a.code = 'b';";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            ResultSet data = preparedStatement.executeQuery();
+            return !data.wasNull();
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Fonction\"";
+            throw new animalExistsException(message);
+        }
+    }
 }
