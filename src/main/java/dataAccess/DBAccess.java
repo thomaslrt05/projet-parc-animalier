@@ -81,4 +81,25 @@ public class DBAccess implements DaoAccess{
         return listOfSpecies;
     }
 
+    public ArrayList<Breed> listBreed () throws listBreedException {
+        ArrayList<Breed> listOfBreed = new ArrayList<Breed>();
+        try {
+            String sqlInstruction = "SELECT * FROM library.breed";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    Breed breed = new Breed(data.getString("id"), data.getString("label"), data.getString("specification"));
+                    listOfBreed.add(breed);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Breed\"";
+            throw new listBreedException(message);
+        }
+        return listOfBreed;
+    }
+
 }
