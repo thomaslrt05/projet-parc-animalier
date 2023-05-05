@@ -1,4 +1,7 @@
 package userInterface;
 
-public class ModifyPanel {
+import javax.swing.*;
+import java.awt.event.ActionListener;
+
+public class ModifyPanel extends JPanel {
 }

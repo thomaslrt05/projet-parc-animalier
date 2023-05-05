@@ -42,7 +42,7 @@ public class DBAccess implements DaoAccess{
     public ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException {
         ArrayList<CareSheetResearch> allData = new ArrayList<CareSheetResearch>();
         try {
-            String sqlInstruction = "SELECT c.label \"careSheet\", a.name, a.code \"codeAnimal\" , b.label \"breedLabel\", c.date FROM library.caresheet c LEFT JOIN library.animal a ON c.animal = a.code LEFT JOIN library.breed b ON a.breed = b.id LEFT JOIN library.species s ON b.specification = s.id WHERE s.id = ?";
+            String sqlInstruction = "SELECT c.label \"careSheet\", a.name, a.code \"codeAnimal\" , b.label \"breedLabel\", c.date FROM caresheet c LEFT JOIN animal a ON c.animal = a.code LEFT JOIN breed b ON a.breed = b.id LEFT JOIN species s ON b.specification = s.id WHERE s.id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, species);
             ResultSet data = preparedStatement.executeQuery();
@@ -60,10 +60,10 @@ public class DBAccess implements DaoAccess{
         return allData;
     }
 
-    public ArrayList<Species> listSpecies() throws listSpeciesException {
+    public ArrayList<Species> listSpecies() throws ListSpeciesException {
         ArrayList<Species> listOfSpecies = new ArrayList<Species>();
         try {
-            String sqlInstruction = "SELECT s.label, s.id FROM library.species s;";
+            String sqlInstruction = "SELECT s.label, s.id FROM species s;";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
 
             ResultSet data = preparedStatement.executeQuery();
@@ -76,15 +76,15 @@ public class DBAccess implements DaoAccess{
             }
         } catch (SQLException e) {
             String message = "Impossible de récuperer les données de la table \"species\"";
-            throw new listSpeciesException(message);
+            throw new ListSpeciesException(message);
         }
         return listOfSpecies;
     }
 
-    public ArrayList<Breed> listBreed () throws listBreedException {
+    public ArrayList<Breed> listBreed () throws ListBreedException {
         ArrayList<Breed> listOfBreed = new ArrayList<Breed>();
         try {
-            String sqlInstruction = "SELECT * FROM library.breed";
+            String sqlInstruction = "SELECT * FROM breed";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
 
             ResultSet data = preparedStatement.executeQuery();
@@ -97,15 +97,15 @@ public class DBAccess implements DaoAccess{
             }
         } catch (SQLException e) {
             String message = "Impossible de récuperer les données de la table \"Breed\"";
-            throw new listBreedException(message);
+            throw new ListBreedException(message);
         }
         return listOfBreed;
     }
 
-    public ArrayList<Fonction> listFonction () throws listFonctionsException{
+    public ArrayList<Fonction> listFonctions () throws ListFonctionsException{
         ArrayList<Fonction> listOfFonctions = new ArrayList<Fonction>();
         try {
-            String sqlInstruction = "SELECT * FROM library.fonction";
+            String sqlInstruction = "SELECT * FROM fonction";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
 
             ResultSet data = preparedStatement.executeQuery();
@@ -119,21 +119,21 @@ public class DBAccess implements DaoAccess{
             }
         } catch (SQLException e) {
             String message = "Impossible de récuperer les données de la table \"Fonction\"";
-            throw new listFonctionsException(message);
+            throw new ListFonctionsException(message);
         }
         return listOfFonctions;
     }
 
-    public boolean animalExists(String code) throws animalExistsException{
+    public boolean animalExists(String code) throws AnimalExistsException{
         try {
-            String sqlInstruction = "SELECT * FROM library.animal a WHERE a.code = ?";
+            String sqlInstruction = "SELECT * FROM animal a WHERE a.code = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, code);
             ResultSet data = preparedStatement.executeQuery();
             return !data.wasNull();
         } catch (SQLException e) {
             String message = "Impossible de récuperer les données de la table \"Fonction\"";
-            throw new animalExistsException(message);
+            throw new AnimalExistsException(message);
         }
     }
 }

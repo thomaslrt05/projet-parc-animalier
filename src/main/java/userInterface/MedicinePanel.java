@@ -1,4 +1,6 @@
 package userInterface;
 
-public class MedicinePanel {
+import javax.swing.*;
+
+public class MedicinePanel extends JPanel {
 }

@@ -20,7 +20,7 @@ public class Manager {
         return dao.careSheetSearch(species);
     }
 
-    public ArrayList<Species> listSpecies() throws listSpeciesException {
+    public ArrayList<Species> listSpecies() throws ListSpeciesException {
         return dao.listSpecies();
     }
 }

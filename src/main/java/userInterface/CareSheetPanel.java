@@ -1,4 +1,6 @@
 package userInterface;
 
-public class CareSheetPanel {
+import javax.swing.*;
+
+public class CareSheetPanel extends JPanel {
 }

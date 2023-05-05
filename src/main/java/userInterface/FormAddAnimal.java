@@ -9,6 +9,7 @@ import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class FormAddAnimal extends JPanel {
@@ -21,6 +22,7 @@ public class FormAddAnimal extends JPanel {
     private ApplicationController controller;
     private JSpinner spinner;
     private SpinnerDateModel model;
+    private ArrayList<Species> speciesList;
 
 
     public FormAddAnimal()  {
@@ -85,7 +87,16 @@ public class FormAddAnimal extends JPanel {
         formPanel.add(isDangerousBox);
 
         speciesLabel = new JLabel("Espèce : ");
-        speciesCombo = new JComboBox<>(Species.getSpeciesList());
+        speciesCombo = new JComboBox<>();
+
+        try {
+            speciesList = controller.listSpecies();
+            for (Species species: speciesList) {
+                speciesCombo.addItem(species.getLabel());
+            }
+        }catch (ListSpeciesException e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+        }
         formPanel.add(speciesLabel);
         formPanel.add(speciesCombo);
 
@@ -114,7 +125,7 @@ public class FormAddAnimal extends JPanel {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Traiter le formulaire soumis
+
                 String code = codeField.getText();
                 String name = nameField.getText();
                 Gender sex = (sexMaleButton.isSelected()) ? Gender.M : Gender.F;

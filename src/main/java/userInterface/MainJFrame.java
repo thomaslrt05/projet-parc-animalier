@@ -65,44 +65,67 @@ public class MainJFrame extends JFrame implements ActionListener {
 
         setJMenuBar(menuBar);
 
-        panel.add(new JLabel("Gestion du parc animalier"));
+        panel.setLayout(new BorderLayout());
+        JLabel label = new JLabel("Gestion du parc animalier", SwingConstants.CENTER);
+        panel.add(label, BorderLayout.NORTH);
 
         animation = new AntilopeAnimation(this);
-        panel.add(animation.getPanel(),BorderLayout.SOUTH);
+        panel.add(animation.getPanel(),BorderLayout.CENTER);
         animation.start();
         setVisible(true);
     }
 
-    // Implémentation de l'action listener pour les options de menu
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Quitter")) {
             System.exit(0);
         } else if (e.getActionCommand().equals("Inscription")) {
-                animation.interrupt();
                 FormAddAnimal formAddAnimal = new FormAddAnimal();
                 panel.removeAll();
                 panel.setLayout(new BorderLayout());
                 panel.add(formAddAnimal,BorderLayout.CENTER);
                 panel.revalidate();
         } else if (e.getActionCommand().equals("Modifier")){
-
+            ModifyPanel modifyPanel = new ModifyPanel();
+            panel.removeAll();
+            panel.setLayout(new BorderLayout());
+            panel.add(modifyPanel,BorderLayout.CENTER);
+            panel.revalidate();
         } else if (e.getActionCommand().equals("Supprimer")){
-
+            DeletePanel deletePanel = new DeletePanel();
+            panel.removeAll();
+            panel.setLayout(new BorderLayout());
+            panel.add(deletePanel,BorderLayout.CENTER);
+            panel.revalidate();
         } else if (e.getActionCommand().equals("Listing")){
-
+            ListingPanel listingPanel = new ListingPanel();
+            panel.removeAll();
+            panel.setLayout(new BorderLayout());
+            panel.add(listingPanel,BorderLayout.CENTER);
+            panel.revalidate();
         } else if (e.getActionCommand().equals("Par espèce")) {
-
+            CareSheetPanel careSheetPanel = new CareSheetPanel();
+            panel.removeAll();
+            panel.setLayout(new BorderLayout());
+            panel.add(careSheetPanel,BorderLayout.CENTER);
+            panel.revalidate();
         } else if (e.getActionCommand().equals("Par fonction")) {
-            animation.interrupt();
             RemarkPanel panelRemark = new RemarkPanel();
             panel.removeAll();
             panel.setLayout(new BorderLayout());
             panel.add(panelRemark, BorderLayout.CENTER);
             panel.revalidate();
         } else if (e.getActionCommand().equals("Par médicament")) {
-            ///
+            MedicinePanel medicinePanel = new MedicinePanel();
+            panel.removeAll();
+            panel.setLayout(new BorderLayout());
+            panel.add(medicinePanel, BorderLayout.CENTER);
+            panel.revalidate();
         } else if (e.getActionCommand().equals("Retour à la fenêtre principal")){
-            ////
+            panel.removeAll();
+            panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            panel.add(new JLabel("Gestion du parc animalier"));
+            panel.add(animation.getPanel(),BorderLayout.CENTER);
+            panel.revalidate();
         }
     }
 }

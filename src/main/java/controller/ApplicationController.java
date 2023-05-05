@@ -1,7 +1,7 @@
 package controller;
 import Exceptions.AddAnimalException;
 import Exceptions.CareSheetResearchException;
-import Exceptions.listSpeciesException;
+import Exceptions.ListSpeciesException;
 import business.*;
 import model.Animal;
 import model.CareSheetResearch;
@@ -25,7 +25,7 @@ public class ApplicationController {
         return manager.careSheetSearch(species);
     }
 
-    public ArrayList<Species> listSpecies() throws listSpeciesException {
+    public ArrayList<Species> listSpecies() throws ListSpeciesException {
         return manager.listSpecies();
     }
 }

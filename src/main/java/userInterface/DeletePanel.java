@@ -1,4 +1,7 @@
 package userInterface;
 
-public class DeletePanel {
+import javax.swing.*;
+
+public class DeletePanel extends JPanel {
+
 }
