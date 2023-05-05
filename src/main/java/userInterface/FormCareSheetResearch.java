@@ -34,6 +34,7 @@ public class FormCareSheetResearch extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 // Traiter le formulaire soumis
                 String species = (String) speciesCombo.getSelectedItem();
+                // TODO utiliser listSPecies pour avoir les infos
                 String code = switch (species) {
                     case "crocodile" -> "s1";
                     case "lion" -> "s2";
