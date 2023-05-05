@@ -120,6 +120,7 @@ public class FormAddAnimal extends JPanel {
                 Gender sex = (sexMaleButton.isSelected()) ? Gender.M : Gender.F;
                 String species = (String) speciesCombo.getSelectedItem();
                 String breed = "";
+                // TODO utiliser listSpecies
                 switch (species) {
                     case "crocodile":
                         breed = "b1";

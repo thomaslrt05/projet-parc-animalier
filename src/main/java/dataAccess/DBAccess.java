@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import model.Species;
 
 public class DBAccess implements DaoAccess{
     private Connection connection;
@@ -59,4 +60,80 @@ public class DBAccess implements DaoAccess{
         return allData;
     }
 
+    public ArrayList<Species> listSpecies() throws listSpeciesException {
+        ArrayList<Species> listOfSpecies = new ArrayList<Species>();
+        try {
+            String sqlInstruction = "SELECT s.label, s.id FROM library.species s;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    Species species = new Species(data.getString("id"), data.getString("label"));
+                    listOfSpecies.add(species);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"species\"";
+            throw new listSpeciesException(message);
+        }
+        return listOfSpecies;
+    }
+
+    public ArrayList<Breed> listBreed () throws listBreedException {
+        ArrayList<Breed> listOfBreed = new ArrayList<Breed>();
+        try {
+            String sqlInstruction = "SELECT * FROM library.breed";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    Breed breed = new Breed(data.getString("id"), data.getString("label"), data.getString("specification"));
+                    listOfBreed.add(breed);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Breed\"";
+            throw new listBreedException(message);
+        }
+        return listOfBreed;
+    }
+
+    public ArrayList<Fonction> listFonction () throws listFonctionsException{
+        ArrayList<Fonction> listOfFonctions = new ArrayList<Fonction>();
+        try {
+            String sqlInstruction = "SELECT * FROM library.fonction";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    // TODO
+                    Fonction fonction = new Fonction(data.getString("id"), EnumRank.valueOf(data.getString("position")), data.getString("label"));
+                    listOfFonctions.add(fonction);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Fonction\"";
+            throw new listFonctionsException(message);
+        }
+        return listOfFonctions;
+    }
+
+    public boolean animalExists(String code) throws animalExistsException{
+        try {
+            String sqlInstruction = "SELECT * FROM library.animal a WHERE a.code = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            ResultSet data = preparedStatement.executeQuery();
+            return !data.wasNull();
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Fonction\"";
+            throw new animalExistsException(message);
+        }
+    }
 }

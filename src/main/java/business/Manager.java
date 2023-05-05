@@ -16,7 +16,11 @@ public class Manager {
     public void addAnimal(Animal animal) throws AddAnimalException {
         dao.addAnimal(animal);
     }
-    public ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException{
+    public ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException {
         return dao.careSheetSearch(species);
+    }
+
+    public ArrayList<Species> listSpecies() throws listSpeciesException {
+        return dao.listSpecies();
     }
 }

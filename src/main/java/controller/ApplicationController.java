@@ -1,9 +1,11 @@
 package controller;
 import Exceptions.AddAnimalException;
 import Exceptions.CareSheetResearchException;
+import Exceptions.listSpeciesException;
 import business.*;
 import model.Animal;
 import model.CareSheetResearch;
+import model.Species;
 
 import java.util.ArrayList;
 
@@ -21,5 +23,9 @@ public class ApplicationController {
 
     public ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException{
         return manager.careSheetSearch(species);
+    }
+
+    public ArrayList<Species> listSpecies() throws listSpeciesException {
+        return manager.listSpecies();
     }
 }
