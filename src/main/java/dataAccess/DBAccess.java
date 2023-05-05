@@ -102,4 +102,26 @@ public class DBAccess implements DaoAccess{
         return listOfBreed;
     }
 
+    public ArrayList<Fonction> listFonction () throws listFonctionsException{
+        ArrayList<Fonction> listOfFonctions = new ArrayList<Fonction>();
+        try {
+            String sqlInstruction = "SELECT * FROM library.fonction";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    // TODO
+                    Fonction fonction = new Fonction(data.getString("id"), EnumRank.valueOf(data.getString("position")), data.getString("label"));
+                    listOfFonctions.add(fonction);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Fonction\"";
+            throw new listFonctionsException(message);
+        }
+        return listOfFonctions;
+    }
+
 }
