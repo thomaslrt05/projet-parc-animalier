@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import model.Species;
 
 public class DBAccess implements DaoAccess{
     private Connection connection;
@@ -57,6 +58,27 @@ public class DBAccess implements DaoAccess{
             throw new CareSheetResearchException(message);
         }
         return allData;
+    }
+
+    public ArrayList<Species> listSpecies() throws listSpeciesException {
+        ArrayList<Species> listOfSpecies = new ArrayList<Species>();
+        try {
+            String sqlInstruction = "SELECT s.label, s.id FROM library.species s;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    Species species = new Species(data.getString("id"), data.getString("label"));
+                    listOfSpecies.add(species);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"species\"";
+            throw new listSpeciesException(message);
+        }
+        return listOfSpecies;
     }
 
 }
