@@ -91,11 +91,7 @@ public class MainJFrame extends JFrame implements ActionListener {
         } else if (e.getActionCommand().equals("Listing")){
 
         } else if (e.getActionCommand().equals("Par espèce")) {
-            FormCareSheetResearch research = new FormCareSheetResearch();
-            panel.removeAll();
-            panel.setLayout(new BorderLayout());
-            panel.add(research,BorderLayout.CENTER);
-            panel.revalidate();
+
         } else if (e.getActionCommand().equals("Par fonction")) {
             animation.interrupt();
             RemarkPanel panelRemark = new RemarkPanel();

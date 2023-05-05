@@ -22,7 +22,7 @@ public class AntilopeAnimation extends Thread {
     public AntilopeAnimation(MainJFrame mainJFrame) {
 
         try {
-            antilopeImage = ImageIO.read(new File("D:\\Mes documents\\Hénallux\\Bac 2\\Q2\\POO avancé\\Parc-animalier\\src\\main\\ressources\\antilope.png"));
+            antilopeImage = ImageIO.read(new File("./src/main/ressources/antilope.png"));
             int antilopeWidth = antilopeImage.getWidth() / 4; // calcul de la largeur de l'antilope affiché à l'écran
             int antilopeHeight = antilopeImage.getHeight() / 4; // calcul de la hauteur de l'antilope affiché à l'écran
             antilopePosition = new Point(-antilopeWidth, mainJFrame.getHeight() / 2 - antilopeHeight / 2); // positionnement à gauche de l'écran à la moitié de la hauteur de la JFrame
