@@ -3,22 +3,22 @@ package model;
 import java.util.Date;
 
 public class CareSheetResearch {
-    private String label;
+    private String speciesLabel;
     private String code;
     private String name;
-    private String labelCaresheet;
+    private String breedLabel;
     private Date date;
 
-    public CareSheetResearch(String label, String code, String name, String labelCaresheet, Date date) {
-        this.label = label;
+    public CareSheetResearch(String speciesLabel, String code, String name, String breedLabel, Date date) {
+        this.speciesLabel = speciesLabel;
         this.code = code;
         this.name = name;
-        this.labelCaresheet = labelCaresheet;
+        this.breedLabel = breedLabel;
         this.date = date;
     }
 
-    public String getLabel() {
-        return label;
+    public String getSpeciesLabel() {
+        return speciesLabel;
     }
 
     public String getCode() {
@@ -29,8 +29,8 @@ public class CareSheetResearch {
         return name;
     }
 
-    public String getLabelCaresheet() {
-        return labelCaresheet;
+    public String getBreedLabel() {
+        return breedLabel;
     }
 
     public Date getDate() {

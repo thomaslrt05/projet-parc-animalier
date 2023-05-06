@@ -42,20 +42,58 @@ public class DBAccess implements DaoAccess{
     public ArrayList<CareSheetResearch> careSheetSearch(String species) throws CareSheetResearchException {
         ArrayList<CareSheetResearch> allData = new ArrayList<CareSheetResearch>();
         try {
-            String sqlInstruction = "SELECT c.label \"careSheet\", a.name, a.code \"codeAnimal\" , b.label \"breedLabel\", c.date FROM caresheet c LEFT JOIN animal a ON c.animal = a.code LEFT JOIN breed b ON a.breed = b.id LEFT JOIN species s ON b.specification = s.id WHERE s.id = ?";
+            String sqlInstruction =  "SELECT c.label \"careSheet\", a.name, a.code \"codeAnimal\" , b.label \"breedLabel\", c.date \n" +
+                    "FROM caresheet c \n" +
+                    "LEFT JOIN animal a ON c.animal = a.code \n" +
+                    "LEFT JOIN breed b ON a.breed = b.id \n" +
+                    "LEFT JOIN species s ON b.specification = s.id \n" +
+                    "WHERE s.id =  ?\n" +
+                    "ORDER BY s.label, a.name";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, species);
             ResultSet data = preparedStatement.executeQuery();
 
             while (data.next()) {
                 if (!data.wasNull()) {
-                    CareSheetResearch search = new CareSheetResearch(data.getString("caresheet"), data.getString("name"), data.getString("codeAnimal"), data.getString("breedLabel"), data.getDate("date"));
+                    String name = data.getString("name");
+                    String label = data.getString("careSheet");
+                    String code = data.getString("codeAnimal");
+                    String labelBreed = data.getString("breedLabel");
+                    java.util.Date date = data.getDate("date");
+
+                    CareSheetResearch search = new CareSheetResearch(label,code,name,labelBreed,date);
                     allData.add(search);
                 }
             }
         } catch (SQLException e) {
             String message = "Impossible de récuperer les données de la recherche";
             throw new CareSheetResearchException(message);
+        }
+        return allData;
+    }
+
+    public ArrayList<RemarkByFonction> remarkByFonctions(String fonction) throws RemarkByFonctionsException {
+        ArrayList<RemarkByFonction> allData = new ArrayList<RemarkByFonction>();
+        try {
+            String sqlInstruction = "SELECT e.lastName, e.firstName, c.label, r.description \n" +
+                    "FROM library.remark r\n" +
+                    "LEFT JOIN library.employee e ON r.author = e.matricule\n" +
+                    "LEFT JOIN library.fonction f ON e.position = f.id\n" +
+                    "LEFT JOIN library.caresheet c ON r.animal = c.animal\n" +
+                    "WHERE c.date = r.date AND e.position = ? ORDER BY c.label, e.lastName";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, fonction);
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    RemarkByFonction search = new RemarkByFonction(data.getString("lastName"), data.getString("firstName"), data.getString("label"), data.getString("description"));
+                    allData.add(search);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la recherche";
+            throw new RemarkByFonctionsException(message);
         }
         return allData;
     }
@@ -136,4 +174,6 @@ public class DBAccess implements DaoAccess{
             throw new AnimalExistsException(message);
         }
     }
+
+
 }

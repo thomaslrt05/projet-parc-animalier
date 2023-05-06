@@ -14,7 +14,6 @@ public class RemarkTableModel extends AbstractTableModel {
         columnNames.add("FirstName");
         columnNames.add("Label");
         columnNames.add("Description");
-
         setContents(contents);
     }
 

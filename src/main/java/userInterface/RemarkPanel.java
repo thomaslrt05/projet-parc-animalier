@@ -26,8 +26,9 @@ public class RemarkPanel extends JPanel implements ActionListener {
     public RemarkPanel() {
         controller = new ApplicationController();
 
-        fonctions = new ArrayList<>(); // SQL
+        fonctions = new ArrayList<>(); // sql
 
+        // ajouter dans la combo box les choix possible
         fonctions.add(new Fonction("1", EnumRank.CHIEF,"fonction1"));
         fonctions.add(new Fonction("2", EnumRank.CHIEF,"fonction2"));
 
