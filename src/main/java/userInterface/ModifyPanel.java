@@ -15,12 +15,12 @@ import java.util.Date;
 public class ModifyPanel extends JPanel implements ActionListener{
     private JComboBox<Animal> comboBox;
     private JPanel panel,formPanel;
-    private JLabel animalLabel,codeLabel, nameLabel, sexLabel, weightLabel, nickNameLabel, speciesLabel,isDangerousLabel,arrivalDate;
-    private JTextField codeField, nameField, weightField, nickNameField;
+    private JLabel animalLabel, nameLabel, sexLabel, weightLabel, nickNameLabel, speciesLabel,isDangerousLabel,arrivalDate;
+    private JTextField nameField, weightField, nickNameField;
     private ApplicationController controller;
     private ArrayList<Animal> animalList;
     private JButton button;
-
+    private String currentCode;
     private JCheckBox isDangerousBox;
     private JComboBox<Species> speciesCombo;
     private JRadioButton sexMaleButton, sexFemaleButton;
@@ -64,11 +64,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
             formPanel = new JPanel(new GridLayout(0, 2));
             formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            codeLabel = new JLabel("Code :");
-            codeField = new JTextField(20);
-            codeField.setText(selectedAnimal.getCode());
-            formPanel.add(codeLabel);
-            formPanel.add(codeField);
+            currentCode = selectedAnimal.getCode();
 
             nameLabel = new JLabel("Nom :");
             nameField = new JTextField(20);
@@ -111,8 +107,6 @@ public class ModifyPanel extends JPanel implements ActionListener{
             sexPanel.add(sexFemaleButton);
 
 
-
-
             weightLabel = new JLabel("Poids :");
             weightField = new JTextField(10);
             weightField.setText(Double.toString(selectedAnimal.getWeight()));
@@ -128,7 +122,6 @@ public class ModifyPanel extends JPanel implements ActionListener{
 
             speciesLabel = new JLabel("Espèce : ");
             speciesCombo = new JComboBox<>();
-            /// TODO que je donne l'id du breed et j'ai le label de species
             try {
                 speciesList = controller.listSpecies();
                 for (Species species: speciesList) {
@@ -140,7 +133,6 @@ public class ModifyPanel extends JPanel implements ActionListener{
             speciesCombo.setSelectedItem(selectedAnimal.getBreed());
             formPanel.add(speciesLabel);
             formPanel.add(speciesCombo);
-
 
 
             submitButton = new JButton("Modifier");
@@ -157,7 +149,6 @@ public class ModifyPanel extends JPanel implements ActionListener{
         else if (e.getActionCommand().equals("Modifier")){
             Boolean errorDetected = false;
             try {
-                String code = codeField.getText();
                 String name = nameField.getText();
                 Gender sex = (sexMaleButton.isSelected()) ? Gender.M : Gender.F;
                 Species speciesSelected = (Species) speciesCombo.getSelectedItem();
@@ -177,11 +168,6 @@ public class ModifyPanel extends JPanel implements ActionListener{
                     nickName = "";
                 }
 
-
-                if (code.length() > 20 || code.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
                 // Vérification nom
                 if (name.length() > 20 || name.isEmpty()) {
                     JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
@@ -231,9 +217,9 @@ public class ModifyPanel extends JPanel implements ActionListener{
                         Animal animalEdited;
 
                         if(nickName.isEmpty()){
-                            animalEdited = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed);
+                            animalEdited = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed);
                         } else {
-                            animalEdited = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                            animalEdited = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
                         }
                         controller.modifyAnimal(animalEdited);
                         removeAll();
