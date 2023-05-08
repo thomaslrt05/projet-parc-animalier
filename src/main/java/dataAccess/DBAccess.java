@@ -368,7 +368,6 @@ public class DBAccess implements DaoAccess{
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, code);
             ResultSet data = preparedStatement.executeQuery();
-
             while (data.next()) {
                 if (!data.wasNull()) {
                     PreparationSheet preparation = new PreparationSheet(data.getInt("number"), data.getDate("date"), data.getDouble("quantity"), data.getString("posology"), data.getString("creation"),data.getString("attachement"), data.getInt("detail"), data.getString("preparation"));
@@ -380,6 +379,18 @@ public class DBAccess implements DaoAccess{
             throw new ListPreparationsException(message);
         }
         return listOfPreparations;
+    }
+
+    public void modifyPreparationSheet(int code) throws ModifyPreparationsheetException{
+        try {
+            String sqlInstruction = "UPDATE preparationsheet p SET `creation` = 'emp5' WHERE (p.attachment = ?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, code);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            String message = "Impossible de modifier cette fiche";
+            throw new ModifyPreparationsheetException(message);
+        }
     }
 
 }

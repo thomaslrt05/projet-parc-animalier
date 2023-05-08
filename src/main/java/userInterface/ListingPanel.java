@@ -2,10 +2,7 @@ package userInterface;
 
 import Exceptions.*;
 import controller.ApplicationController;
-import model.Animal;
-import model.CareSheetResearch;
-import model.Medicine;
-import model.Species;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,11 +13,13 @@ import java.util.ArrayList;
 public class ListingPanel extends JPanel implements ActionListener {
     private JComboBox<Species> speciesJComboBoxBox;
     private JComboBox<Animal> animalJComboBox;
-    private JPanel panel,animalPanel;
-    private JLabel animalLabel,speciesLabel;
+    private JComboBox<PreparationSheet> preparationSheetJComboBox;
+    private JPanel panel,animalPanel,preparationPanel;
+    private JLabel animalLabel,speciesLabel,preparationLabel;
     private ApplicationController controller;
     private ArrayList<Species> speciesList;
     private ArrayList<Animal> animalsList,animalSpecific;
+    private ArrayList<PreparationSheet> preparationSheetsList;
     private JButton buttonSearch;
     private JTable jTable;
     private JScrollPane scrollPanel;
@@ -100,19 +99,58 @@ public class ListingPanel extends JPanel implements ActionListener {
                 this.remove(scrollPanel);
             }
             removeAll();
-
-
+            Animal selectedAnimal = (Animal) animalJComboBox.getSelectedItem();
+            preparationSheetsList = new ArrayList<>();
+            try {
+                preparationSheetsList = controller.getListPreparations(selectedAnimal.getCode());
+            }catch (ListPreparationsException exception){
+                JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+            }
+            ListingPreparationModel model = new ListingPreparationModel(preparationSheetsList);
+            jTable = new JTable(model);
+            jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+            jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            scrollPanel = new JScrollPane (jTable);
+            preparationSheetJComboBox = new JComboBox<>();
+            for (PreparationSheet sheet : preparationSheetsList){
+                preparationSheetJComboBox.addItem(sheet);
+            }
+            preparationLabel = new JLabel("A été effectué aujourd'hui");
+            buttonSearch = new JButton("Valider");
+            buttonSearch.addActionListener(this);
+            preparationPanel = new JPanel();
+            preparationPanel.add(preparationLabel);
+            preparationPanel.add(preparationSheetJComboBox);
+            preparationPanel.add(buttonSearch);
+            add(scrollPanel, BorderLayout.CENTER);
+            add(preparationPanel,BorderLayout.SOUTH);
             revalidate();
             repaint();
-        } else if (e.getActionCommand().equals("A été effectué aujourd'hui")){
+        } else if (e.getActionCommand().equals("Valider")){
             if(jTable != null){
                 this.remove(jTable);
             }
             if(scrollPanel != null){
                 this.remove(scrollPanel);
             }
+            removeAll();
+            PreparationSheet selectedSheet = (PreparationSheet) preparationSheetJComboBox.getSelectedItem();
+            try {
+                controller.modifyPreparationsheet(selectedSheet.getNumber());
+                JOptionPane.showMessageDialog(null,"La fiche a été mise a jour","Réussite",JOptionPane.INFORMATION_MESSAGE);
+            }
+            catch (ModifyPreparationsheetException  exception){
+                JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+            }
+            buttonSearch = new JButton("Retour au listing");
+            add(buttonSearch,BorderLayout.CENTER);
+            revalidate();
+            repaint();
         } else if (e.getActionCommand().equals("Retour au listing")){
-            //
+            removeAll();
+
+            revalidate();
+            repaint();
         }
 
     }

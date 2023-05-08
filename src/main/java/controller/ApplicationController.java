@@ -77,4 +77,8 @@ public class ApplicationController {
     public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException{
         return manager.getListPreparations(code);
     }
+
+    public void modifyPreparationsheet(int code) throws ModifyPreparationsheetException{
+        manager.modifyPreparationSheet(code);
+    }
 }

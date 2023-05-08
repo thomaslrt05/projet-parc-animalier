@@ -75,4 +75,7 @@ public class Manager {
     public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException{
         return dao.getListPreparations(code);
     }
+    public void modifyPreparationSheet(int code) throws ModifyPreparationsheetException{
+        dao.modifyPreparationSheet(code);
+    }
 }
