@@ -17,6 +17,6 @@ public class Fonction {
 
     @Override
     public String toString() {
-        return  label +"("+id+")";
+        return  label;
     }
 }

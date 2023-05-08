@@ -34,9 +34,6 @@ public class Animal {
         this.arrivalDate = date;
     }
 
-    public String toString(){
-        return this.code + " " + this.name;
-    }
 
     public String getCode() {
         return code;
@@ -68,5 +65,10 @@ public class Animal {
 
     public String getBreed() {
         return breed;
+    }
+
+    @Override
+    public String toString(){
+        return name + " ( " + code + " )";
     }
 }

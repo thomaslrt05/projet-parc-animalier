@@ -80,7 +80,8 @@ public class DBAccess implements DaoAccess{
                     "LEFT JOIN library.employee e ON r.author = e.matricule\n" +
                     "LEFT JOIN library.fonction f ON e.position = f.id\n" +
                     "LEFT JOIN library.caresheet c ON r.animal = c.animal\n" +
-                    "WHERE c.date = r.date AND e.position = ? ORDER BY c.label, e.lastName";
+                    "WHERE c.date = r.date AND e.position = ?\n" +
+                    "ORDER BY c.label, e.lastName;";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, fonction);
             ResultSet data = preparedStatement.executeQuery();
@@ -97,6 +98,125 @@ public class DBAccess implements DaoAccess{
         }
         return allData;
     }
+
+    public ArrayList<TreatmentByMedicine> treatmentByMedicineResearch (String name) throws MedecineResearchException{
+        ArrayList<TreatmentByMedicine> allData = new ArrayList<TreatmentByMedicine>();
+        try {
+            String sqlInstruction = "SELECT p.quantity, s.date, t.description" +
+                    "FROM preparationsheet p" +
+                    "LEFT JOIN medicine m ON p.preparation = m.name" +
+                    "LEFT JOIN prescriptionsheet s ON p.detail = s.number" +
+                    "LEFT JOIN treatment t ON s.prescription = t.idCare" +
+                    "WHERE m.name = ?" +
+                    "ORDER BY t.idCare, s.number;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, name);
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    TreatmentByMedicine medicine = new TreatmentByMedicine(data.getString("description"),data.getDouble("quantity"), data.getDate("date") );
+                    allData.add(medicine);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données pour la recherche demandée";
+            throw new MedecineResearchException(message);
+        }
+        return allData;
+    }
+
+    public ArrayList<Medicine> listMedicine () throws ListMedicineException{
+        ArrayList<Medicine> listOfMedicine = new ArrayList<Medicine>();
+        try {
+            String sqlInstruction = "SELECT * FROM medicine";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    Medicine medicine = new Medicine(data.getString("name"), data.getString("unitOfMesurement"), data.getString("instruction"));
+                    listOfMedicine.add(medicine);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Médicament\"";
+            throw new ListMedicineException(message);
+        }
+        return listOfMedicine;
+    }
+
+    public ArrayList<Animal> getAllAnimals () throws GetAllAnimalsException{
+        ArrayList<Animal> listOfAnimals = new ArrayList<Animal>();
+        try {
+            String sqlInstruction = "SELECT * FROM animal";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            ResultSet data = preparedStatement.executeQuery();
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    String code = data.getString("code");
+                    String name = data.getString("name");
+                    String sexGet = data.getString("sex");
+                    Gender sex = Gender.valueOf(sexGet);
+                    Boolean isDangerous = data.getBoolean("isDangerous");
+                    Double weight = data.getDouble("weight");
+                    Date arrivalDate = data.getDate("arrivalDate");
+                    String nickName = data.getString("nickname");
+                    String breed = data.getString("breed");
+
+                    Animal animal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                    listOfAnimals.add(animal);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Animal\"";
+            throw new GetAllAnimalsException(message);
+        }
+        return listOfAnimals;
+    }
+
+    public void modifyAnimal(Animal animal) throws ModifyAnimalException{
+        try {
+            String sqlInstruction = "UPDATE animal \n" +
+                    "SET name = ?, \n" +
+                    "    sex = ?, \n" +
+                    "    isDangerous = ?, \n" +
+                    "    weight = ?, \n" +
+                    "    arrivalDate = ?, \n" +
+                    "    nickName = ?, \n" +
+                    "    breed = ? \n" +
+                    "WHERE code = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(8, animal.getCode());
+            preparedStatement.setString(1, animal.getName());
+            preparedStatement.setString(2, animal.getSex().getLabel());
+            preparedStatement.setBoolean(3, animal.getDangerous());
+            preparedStatement.setDouble(4, animal.getWeight());
+            java.util.Date arrivalDate = animal.getArrivalDate();
+            java.sql.Date sqlArrivalDate = new java.sql.Date(arrivalDate.getTime());
+            preparedStatement.setDate(5, sqlArrivalDate);
+            preparedStatement.setString(6, animal.getNickName());
+            preparedStatement.setString(7, animal.getBreed());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            String message = "Impossible de modifier cet animal";
+            throw new ModifyAnimalException(message);
+        }
+    }
+
+    public void deleteAnimal(String code) throws DeleteAnimalException {
+        try {
+            String sqlInstruction = "DELETE FROM animal WHERE code = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            String message = "Impossible de supprimer cet animal";
+            throw new DeleteAnimalException(message);
+        }
+    }
+
 
     public ArrayList<Species> listSpecies() throws ListSpeciesException {
         ArrayList<Species> listOfSpecies = new ArrayList<Species>();
@@ -175,5 +295,14 @@ public class DBAccess implements DaoAccess{
         }
     }
 
+    public void endConnection() throws EndConnectionException{
+        try {
+            connection.close();
+        }
+        catch (SQLException exception) {
+            String message = "Impossible de fermer la connection";
+            throw new EndConnectionException(message);
+        }
+    }
 
 }

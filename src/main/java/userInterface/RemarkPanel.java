@@ -1,4 +1,6 @@
 package userInterface;
+import Exceptions.ListFonctionsException;
+import Exceptions.RemarkByFonctionsException;
 import controller.*;
 import javax.swing.*;
 import model.EnumRank;
@@ -22,23 +24,25 @@ public class RemarkPanel extends JPanel implements ActionListener {
     private ArrayList<RemarkByFonction> data;
     private JButton button;
     private JTable jTable;
+    private JScrollPane scrollPanel;
 
     public RemarkPanel() {
         controller = new ApplicationController();
 
         fonctions = new ArrayList<>(); // sql
 
-        // ajouter dans la combo box les choix possible
-        fonctions.add(new Fonction("1", EnumRank.CHIEF,"fonction1"));
-        fonctions.add(new Fonction("2", EnumRank.CHIEF,"fonction2"));
+       try {
+           fonctions = controller.listFonctions();
+       }catch (ListFonctionsException exception){
+           JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+       }
 
-        data = new ArrayList<>(); // SQL
+        data = new ArrayList<>();
 
 
 
         setLayout(new BorderLayout());
         panel = new JPanel(new GridLayout(0,4));
-        //border
         fonctionLabel = new JLabel("Fonctions:");
         panel.add(fonctionLabel);
 
@@ -48,7 +52,6 @@ public class RemarkPanel extends JPanel implements ActionListener {
         }
 
         panel.add(comboBox);
-
         button = new JButton("Recherche");
         button.addActionListener(this);
         panel.add(button);
@@ -57,17 +60,24 @@ public class RemarkPanel extends JPanel implements ActionListener {
     }
     public void actionPerformed(ActionEvent e) {
 
-        Fonction selectedFonction = (Fonction) comboBox.getSelectedItem(); // info récup avec la compo
+        if(jTable != null){
+            this.remove(jTable);
+            this.remove(scrollPanel);
+        }
 
-        //faire la recherce sql pour obtenir les infos
+        Fonction selectedFonction = (Fonction) comboBox.getSelectedItem();
 
-        //ici je prend l'array list bidon qu'on a cree
-        RemarkTableModel model = new RemarkTableModel(data);
-        jTable = new JTable(model);
-        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scrollPanel = new JScrollPane (jTable);
-        this.add(scrollPanel, BorderLayout.CENTER);
-        this.revalidate();
+       try {
+           data = controller.remarkByFonctions(selectedFonction.getId());
+           RemarkTableModel model = new RemarkTableModel(data);
+           jTable = new JTable(model);
+           jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+           jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+           JScrollPane scrollPanel = new JScrollPane (jTable);
+           this.add(scrollPanel, BorderLayout.CENTER);
+           this.revalidate();
+       }catch (RemarkByFonctionsException exception){
+           JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+       }
     }
 }

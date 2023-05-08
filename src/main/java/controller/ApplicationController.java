@@ -1,11 +1,7 @@
 package controller;
-import Exceptions.AddAnimalException;
-import Exceptions.CareSheetResearchException;
-import Exceptions.ListSpeciesException;
+import Exceptions.*;
 import business.*;
-import model.Animal;
-import model.CareSheetResearch;
-import model.Species;
+import model.*;
 
 import java.util.ArrayList;
 
@@ -25,7 +21,48 @@ public class ApplicationController {
         return manager.careSheetSearch(species);
     }
 
+    public ArrayList<RemarkByFonction> remarkByFonctions(String fonction) throws RemarkByFonctionsException{
+        return manager.remarkByFonctions(fonction);
+    }
+
+    public ArrayList<TreatmentByMedicine> treatmentByMedicineResearch (String name) throws MedecineResearchException {
+        return manager.treatmentByMedicineResearch(name);
+    }
+
+    public ArrayList<Medicine> listMedicine () throws ListMedicineException{
+        return manager.listMedicine();
+    }
+
+    public void modifyAnimal(Animal animal) throws ModifyAnimalException{
+        manager.modifyAnimal(animal);
+    }
+
+    public void deleteAnimal(String code) throws DeleteAnimalException{
+        manager.deleteAnimal(code);
+    }
+    
+
+    public ArrayList<Breed> listBreed () throws ListBreedException{
+        return manager.listBreed();
+    }
+
+    public ArrayList<Fonction> listFonctions () throws ListFonctionsException{
+        return manager.listFonctions();
+    }
+
+    public boolean animalExists(String code) throws AnimalExistsException{
+        return manager.animalExists(code);
+    }
+
     public ArrayList<Species> listSpecies() throws ListSpeciesException {
         return manager.listSpecies();
+    }
+
+    public ArrayList<Animal> getAllAnimals () throws GetAllAnimalsException{
+        return manager.getAllAnimals();
+    }
+
+    public void endConnection() throws EndConnectionException{
+        manager.endConnection();
     }
 }

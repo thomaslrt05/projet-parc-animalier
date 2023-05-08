@@ -1,5 +1,7 @@
 package userInterface;
 
+import com.sun.jdi.connect.spi.Connection;
+import dataAccess.SingletonConnexion;
 import model.*;
 import controller.*;
 
@@ -14,8 +16,10 @@ public class MainJFrame extends JFrame implements ActionListener {
     private JPanel panel;
     private Container container;
     private AntilopeAnimation animation;
+    private ApplicationController controller;
 
     public MainJFrame() {
+        controller = new ApplicationController();
         panel = new JPanel();
         container = getContentPane();
         container.add(panel);
@@ -33,7 +37,6 @@ public class MainJFrame extends JFrame implements ActionListener {
         menuBar.add(animalMenu);
         menuBar.add(researchMenu);
 
-        JMenuItem leaveMenuItem = new JMenuItem("Quitter");
         JMenuItem backToMainFrame = new JMenuItem("Retour à la fenêtre principal");
         JMenuItem inscriptionMenuItem = new JMenuItem("Inscription");
         JMenuItem modifyMenuItem = new JMenuItem("Modifier");
@@ -44,7 +47,6 @@ public class MainJFrame extends JFrame implements ActionListener {
         JMenuItem medicineMenuItem = new JMenuItem("Par médicament");
 
         applicationMenu.add(backToMainFrame);
-        applicationMenu.add(leaveMenuItem);
         animalMenu.add(inscriptionMenuItem);
         animalMenu.add(modifyMenuItem);
         animalMenu.add(deleteMenuItem);
@@ -53,7 +55,6 @@ public class MainJFrame extends JFrame implements ActionListener {
         researchMenu.add(fonctionMenuItem);
         researchMenu.add(medicineMenuItem);
 
-        leaveMenuItem.addActionListener(this);
         backToMainFrame.addActionListener(this);
         inscriptionMenuItem.addActionListener(this);
         modifyMenuItem.addActionListener(this);
@@ -73,12 +74,22 @@ public class MainJFrame extends JFrame implements ActionListener {
         panel.add(animation.getPanel(),BorderLayout.CENTER);
         animation.start();
         setVisible(true);
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                try {
+                    controller.endConnection();
+                    e.getWindow().dispose();
+                } catch (EndConnectionException exception) {
+                    JOptionPane.showMessageDialog (null, exception.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Quitter")) {
-            System.exit(0);
-        } else if (e.getActionCommand().equals("Inscription")) {
+      if (e.getActionCommand().equals("Inscription")) {
                 FormAddAnimal formAddAnimal = new FormAddAnimal();
                 panel.removeAll();
                 panel.setLayout(new BorderLayout());

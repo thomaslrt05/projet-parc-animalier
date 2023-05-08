@@ -21,6 +21,7 @@ public class CareSheetPanel extends JPanel implements ActionListener {
     private ArrayList<CareSheetResearch> data;
     private JButton button;
     private JTable jTable;
+    private JScrollPane scrollPanel;
 
     public CareSheetPanel() {
         controller = new ApplicationController();
@@ -51,6 +52,10 @@ public class CareSheetPanel extends JPanel implements ActionListener {
 
     }
     public void actionPerformed(ActionEvent e) {
+        if(jTable != null){
+            this.remove(jTable);
+            this.remove(scrollPanel);
+        }
         Species selectedSpecies = (Species) comboBox.getSelectedItem(); // info récup avec la compo
         try {
             data = controller.careSheetSearch(selectedSpecies.getId());
@@ -58,7 +63,7 @@ public class CareSheetPanel extends JPanel implements ActionListener {
             jTable = new JTable(model);
             jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
             jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            JScrollPane scrollPanel = new JScrollPane (jTable);
+            scrollPanel = new JScrollPane (jTable);
             this.add(scrollPanel, BorderLayout.CENTER);
             this.revalidate();
         }catch (CareSheetResearchException exception){

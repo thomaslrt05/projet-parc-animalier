@@ -45,10 +45,6 @@ public class AntilopeAnimation extends Thread {
     }
 
 
-    public boolean isRunning() {
-        return running;
-    }
-
     public int getAntilopePositionX() {
         return antilopePosition.x;
     }

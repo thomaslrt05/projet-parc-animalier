@@ -76,7 +76,6 @@ public class FormAddAnimal extends JPanel {
 
         weightLabel = new JLabel("Poids :");
         weightField = new JTextField(10);
-        weightLabel.setLabelFor(weightField);
         formPanel.add(weightLabel);
         formPanel.add(weightField);
 

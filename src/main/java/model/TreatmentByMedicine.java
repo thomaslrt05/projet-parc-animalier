@@ -3,14 +3,16 @@ package model;
 import java.util.Date;
 
 public class TreatmentByMedicine {
+
+    private String description;
     private double quantity;
     private Date date;
-    private String description;
 
-    public TreatmentByMedicine(double quantity, Date date, String description) {
+
+    public TreatmentByMedicine(String description, double quantity, Date date) {
+        this.description = description;
         this.quantity = quantity;
         this.date = date;
-        this.description = description;
     }
 
     public double getQuantity() {

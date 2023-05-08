@@ -11,5 +11,12 @@ public class Medicine {
         this.instruction = instruction;
     }
 
+    @Override
+    public String toString(){
+        return name;
+    }
 
+    public String getId() {
+        return name;
+    }
 }
