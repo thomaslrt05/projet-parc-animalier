@@ -26,7 +26,7 @@ public class CareSheetPanel extends JPanel implements ActionListener {
     public CareSheetPanel() {
         controller = new ApplicationController();
 
-        speciesList = new ArrayList<>(); // sql
+        speciesList = new ArrayList<>();
         try {
             speciesList = controller.listSpecies();
         }catch (ListSpeciesException e){
@@ -54,8 +54,11 @@ public class CareSheetPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(jTable != null){
             this.remove(jTable);
+        }
+        if(scrollPanel != null){
             this.remove(scrollPanel);
         }
+
         Species selectedSpecies = (Species) comboBox.getSelectedItem(); // info récup avec la compo
         try {
             data = controller.careSheetSearch(selectedSpecies.getId());

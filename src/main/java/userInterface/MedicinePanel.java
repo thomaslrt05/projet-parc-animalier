@@ -55,6 +55,8 @@ public class MedicinePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(jTable != null){
             this.remove(jTable);
+        }
+        if(scrollPanel != null){
             this.remove(scrollPanel);
         }
         Medicine selectedMedicine = (Medicine) comboBox.getSelectedItem();

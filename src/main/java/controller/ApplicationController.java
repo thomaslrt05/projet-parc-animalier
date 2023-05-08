@@ -65,4 +65,16 @@ public class ApplicationController {
     public void endConnection() throws EndConnectionException{
         manager.endConnection();
     }
+
+    public Breed getBreed(String species) throws GetBreedException{
+        return manager.getBreed(species);
+    }
+
+    public ArrayList<Animal> getAnimalsBySpecies(String codeAnimal) throws GetAnimalsException{
+        return manager.getAnimalsBySpecies(codeAnimal);
+    }
+
+    public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException{
+        return manager.getListPreparations(code);
+    }
 }

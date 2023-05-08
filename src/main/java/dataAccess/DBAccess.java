@@ -76,10 +76,10 @@ public class DBAccess implements DaoAccess{
         ArrayList<RemarkByFonction> allData = new ArrayList<RemarkByFonction>();
         try {
             String sqlInstruction = "SELECT e.lastName, e.firstName, c.label, r.description \n" +
-                    "FROM library.remark r\n" +
-                    "LEFT JOIN library.employee e ON r.author = e.matricule\n" +
-                    "LEFT JOIN library.fonction f ON e.position = f.id\n" +
-                    "LEFT JOIN library.caresheet c ON r.animal = c.animal\n" +
+                    "FROM remark r\n" +
+                    "LEFT JOIN employee e ON r.author = e.matricule\n" +
+                    "LEFT JOIN fonction f ON e.position = f.id\n" +
+                    "LEFT JOIN caresheet c ON r.animal = c.animal\n" +
                     "WHERE c.date = r.date AND e.position = ?\n" +
                     "ORDER BY c.label, e.lastName;";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
@@ -102,12 +102,12 @@ public class DBAccess implements DaoAccess{
     public ArrayList<TreatmentByMedicine> treatmentByMedicineResearch (String name) throws MedecineResearchException{
         ArrayList<TreatmentByMedicine> allData = new ArrayList<TreatmentByMedicine>();
         try {
-            String sqlInstruction = "SELECT p.quantity, s.date, t.description" +
-                    "FROM preparationsheet p" +
-                    "LEFT JOIN medicine m ON p.preparation = m.name" +
-                    "LEFT JOIN prescriptionsheet s ON p.detail = s.number" +
-                    "LEFT JOIN treatment t ON s.prescription = t.idCare" +
-                    "WHERE m.name = ?" +
+            String sqlInstruction = "SELECT p.quantity, s.date, t.description\n" +
+                    "FROM preparationsheet p\n" +
+                    "LEFT JOIN medicine m ON p.preparation = m.name \n" +
+                    "LEFT JOIN prescriptionsheet s ON p.detail = s.number \n" +
+                    "LEFT JOIN treatment t ON s.prescription = t.idCare \n" +
+                    "WHERE m.name = ? \n" +
                     "ORDER BY t.idCare, s.number;";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, name);
@@ -288,9 +288,10 @@ public class DBAccess implements DaoAccess{
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, code);
             ResultSet data = preparedStatement.executeQuery();
-            return !data.wasNull();
+            boolean hasData = data.next();
+            return hasData;
         } catch (SQLException e) {
-            String message = "Impossible de récuperer les données de la table \"Fonction\"";
+            String message = "Impossible de récuperer les données de la table \"Animal\"";
             throw new AnimalExistsException(message);
         }
     }
@@ -303,6 +304,82 @@ public class DBAccess implements DaoAccess{
             String message = "Impossible de fermer la connection";
             throw new EndConnectionException(message);
         }
+    }
+
+    public Breed getBreed(String species) throws GetBreedException{
+        Breed breed = null;
+        try {
+            String sqlInstruction = "SELECT * FROM breed a WHERE a.specification = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, species);
+            ResultSet data = preparedStatement.executeQuery();
+            if (data.next()) {
+                breed = new Breed(data.getString("id"), data.getString("label"), data.getString("specification"));
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Breed\"";
+            throw new GetBreedException(message);
+        }
+        return breed;
+    }
+
+    public ArrayList<Animal> getAnimalsBySpecies(String codeAnimal) throws GetAnimalsException{
+        ArrayList<Animal> listOfAnimals = new ArrayList<Animal>();
+        try {
+            String sqlInstruction = "SELECT a.code, a.name, a.sex, a.isDangerous, a.weight, a.arrivalDate, a.nickName, a.breed " +
+                    "FROM animal a " +
+                    "LEFT JOIN breed b ON a.breed = b.id " +
+                    "LEFT JOIN species s ON b.specification = s.id " +
+                    "WHERE s.id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, codeAnimal);
+            ResultSet data = preparedStatement.executeQuery();
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    String code = data.getString("code");
+                    String name = data.getString("name");
+                    String sexGet = data.getString("sex");
+                    Gender sex = Gender.valueOf(sexGet);
+                    Boolean isDangerous = data.getBoolean("isDangerous");
+                    Double weight = data.getDouble("weight");
+                    Date arrivalDate = data.getDate("arrivalDate");
+                    String nickName = data.getString("nickname");
+                    String breed = data.getString("breed");
+
+                    Animal animal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                    listOfAnimals.add(animal);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Animals\"";
+            throw new GetAnimalsException(message);
+        }
+        return listOfAnimals;
+    }
+
+    public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException{
+        ArrayList<PreparationSheet> listOfPreparations = new ArrayList<PreparationSheet>();
+        try {
+            String sqlInstruction = "SELECT * " +
+                    "FROM preparationsheet p " +
+                    "LEFT JOIN animal a ON p.attachment = a.code " +
+                    "WHERE p.creation IS NULL AND a.code = ? " +
+                    "ORDER BY p.date DESC;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    PreparationSheet preparation = new PreparationSheet(data.getInt("number"), data.getDate("date"), data.getDouble("quantity"), data.getString("posology"), data.getString("creation"),data.getString("attachement"), data.getInt("detail"), data.getString("preparation"));
+                    listOfPreparations.add(preparation);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données pour les préparations";
+            throw new ListPreparationsException(message);
+        }
+        return listOfPreparations;
     }
 
 }

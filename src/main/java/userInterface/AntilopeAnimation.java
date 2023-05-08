@@ -5,8 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -39,7 +38,7 @@ public class AntilopeAnimation extends Thread {
                 }
             };
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Le chemin pour charger l'image est incorrect","Erreur",JOptionPane.ERROR_MESSAGE);
 
         }
     }

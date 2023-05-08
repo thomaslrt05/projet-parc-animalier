@@ -11,5 +11,7 @@ public class Breed {
         this.specification = specification;
     }
 
-
+    public String getId() {
+        return id;
+    }
 }

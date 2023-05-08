@@ -63,4 +63,16 @@ public class Manager {
     public void endConnection() throws EndConnectionException{
         dao.endConnection();
     }
+
+    public Breed getBreed(String species) throws GetBreedException{
+        return dao.getBreed(species);
+    }
+
+    public ArrayList<Animal> getAnimalsBySpecies(String codeAnimal) throws GetAnimalsException{
+        return dao.getAnimalsBySpecies(codeAnimal);
+    }
+
+    public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException{
+        return dao.getListPreparations(code);
+    }
 }

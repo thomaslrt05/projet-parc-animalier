@@ -11,9 +11,9 @@ public class PreparationSheet {
     private String creation;
     private String attachment;
     private int detail;
-    private String preration;
+    private String preparation;
 
-    public PreparationSheet(int number, Date date, double quantity, String posology, String creation, String attachment, int detail, String preration) {
+    public PreparationSheet(int number, Date date, double quantity, String posology, String creation, String attachment, int detail, String preparation) {
         this.number = number;
         this.date = date;
         this.quantity = quantity;
@@ -21,26 +21,58 @@ public class PreparationSheet {
         this.creation = creation;
         this.attachment = attachment;
         this.detail = detail;
-        this.preration = preration;
+        this.preparation = preparation;
     }
 
-    public PreparationSheet(int number, double quantity, String posology, String creation, String attachment, int detail, String preration) {
+    public PreparationSheet(int number, double quantity, String posology, String creation, String attachment, int detail, String preparation) {
         this.number = number;
         this.quantity = quantity;
         this.posology = posology;
         this.creation = creation;
         this.attachment = attachment;
         this.detail = detail;
-        this.preration = preration;
+        this.preparation = preparation;
     }
 
-    public PreparationSheet(int number, Date date, double quantity, String posology,String attachment, int detail, String preration) {
+    public PreparationSheet(int number, Date date, double quantity, String posology,String attachment, int detail, String preparation) {
         this.number = number;
         this.date = date;
         this.quantity = quantity;
         this.posology = posology;
         this.attachment = attachment;
         this.detail = detail;
-        this.preration = preration;
+        this.preparation = preparation;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public String getPosology() {
+        return posology;
+    }
+
+    public String getCreation() {
+        return creation;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public int getDetail() {
+        return detail;
+    }
+
+    public String getPreparation() {
+        return preparation;
     }
 }

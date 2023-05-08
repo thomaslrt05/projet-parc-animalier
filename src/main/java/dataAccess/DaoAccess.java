@@ -21,5 +21,10 @@ public interface DaoAccess {
     public ArrayList<Fonction> listFonctions () throws ListFonctionsException;
     public boolean animalExists(String code) throws AnimalExistsException;
     public void endConnection() throws EndConnectionException;
+    public Breed getBreed(String species) throws GetBreedException;
+    public ArrayList<Animal> getAnimalsBySpecies(String codeAnimal) throws GetAnimalsException;
+    public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException;
+
+
 
 }

@@ -62,6 +62,8 @@ public class RemarkPanel extends JPanel implements ActionListener {
 
         if(jTable != null){
             this.remove(jTable);
+        }
+        if(scrollPanel != null){
             this.remove(scrollPanel);
         }
 
