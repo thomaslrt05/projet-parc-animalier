@@ -75,4 +75,9 @@ public class PreparationSheet {
     public String getPreparation() {
         return preparation;
     }
+
+    @Override
+    public String toString(){
+        return number + " " + date + " " + detail;
+    }
 }

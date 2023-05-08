@@ -20,7 +20,7 @@ public class ListingPanel extends JPanel implements ActionListener {
     private ArrayList<Species> speciesList;
     private ArrayList<Animal> animalsList,animalSpecific;
     private ArrayList<PreparationSheet> preparationSheetsList;
-    private JButton buttonSearch;
+    private JButton buttonSearch,buttonBackToListing;
     private JTable jTable;
     private JScrollPane scrollPanel;
     public ListingPanel(){
@@ -53,36 +53,37 @@ public class ListingPanel extends JPanel implements ActionListener {
         if (e.getActionCommand().equals("Rechercher")){
             Species selectedSpecies = (Species) speciesJComboBoxBox.getSelectedItem();
             try {
-                if(jTable != null){
-                    remove(jTable);
-                }
-                if(scrollPanel != null){
-                    remove(scrollPanel);
-                }
+                removeAll();
                 animalsList = controller.getAnimalsBySpecies(selectedSpecies.getId());
                 ListingAnimalModel model = new ListingAnimalModel(animalsList);
+
                 jTable = new JTable(model);
                 jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
                 jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 scrollPanel = new JScrollPane (jTable);
                 animalLabel = new JLabel("Animal choisi : ");
                 animalSpecific = new ArrayList<>();
+
                 try {
                     animalSpecific = controller.getAnimalsBySpecies(selectedSpecies.getId());
                 }catch (GetAnimalsException exception){
                     JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                 }
                 animalJComboBox = new JComboBox<>();
+
                 for (Animal animal : animalSpecific){
                     animalJComboBox.addItem(animal);
                 }
+
                 buttonSearch = new JButton("Afficher ses préparations");
                 buttonSearch.addActionListener(this);
-
+                buttonBackToListing = new JButton("Retour au listing");
+                buttonBackToListing.addActionListener(this);
                 animalPanel = new JPanel();
                 animalPanel.add(animalLabel,BorderLayout.SOUTH);
                 animalPanel.add(animalJComboBox,BorderLayout.SOUTH);
                 animalPanel.add(buttonSearch,BorderLayout.SOUTH);
+                animalPanel.add(buttonBackToListing);
 
                 add(scrollPanel, BorderLayout.CENTER);
                 add(animalPanel,BorderLayout.SOUTH);
@@ -92,15 +93,11 @@ public class ListingPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
             }
         } else if (e.getActionCommand().equals("Afficher ses préparations")){
-            if(jTable != null){
-                this.remove(jTable);
-            }
-            if(scrollPanel != null){
-                this.remove(scrollPanel);
-            }
             removeAll();
+
             Animal selectedAnimal = (Animal) animalJComboBox.getSelectedItem();
             preparationSheetsList = new ArrayList<>();
+
             try {
                 preparationSheetsList = controller.getListPreparations(selectedAnimal.getCode());
             }catch (ListPreparationsException exception){
@@ -110,7 +107,9 @@ public class ListingPanel extends JPanel implements ActionListener {
             jTable = new JTable(model);
             jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
             jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
             scrollPanel = new JScrollPane (jTable);
+
             preparationSheetJComboBox = new JComboBox<>();
             for (PreparationSheet sheet : preparationSheetsList){
                 preparationSheetJComboBox.addItem(sheet);
@@ -118,22 +117,19 @@ public class ListingPanel extends JPanel implements ActionListener {
             preparationLabel = new JLabel("A été effectué aujourd'hui");
             buttonSearch = new JButton("Valider");
             buttonSearch.addActionListener(this);
+            buttonBackToListing = new JButton("Retour au listing");
+            buttonBackToListing.addActionListener(this);
             preparationPanel = new JPanel();
             preparationPanel.add(preparationLabel);
             preparationPanel.add(preparationSheetJComboBox);
             preparationPanel.add(buttonSearch);
+            preparationPanel.add(buttonBackToListing);
             add(scrollPanel, BorderLayout.CENTER);
             add(preparationPanel,BorderLayout.SOUTH);
             revalidate();
             repaint();
         } else if (e.getActionCommand().equals("Valider")){
-            if(jTable != null){
-                this.remove(jTable);
-            }
-            if(scrollPanel != null){
-                this.remove(scrollPanel);
-            }
-            removeAll();
+
             PreparationSheet selectedSheet = (PreparationSheet) preparationSheetJComboBox.getSelectedItem();
             try {
                 controller.modifyPreparationsheet(selectedSheet.getNumber());
@@ -142,13 +138,21 @@ public class ListingPanel extends JPanel implements ActionListener {
             catch (ModifyPreparationsheetException  exception){
                 JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
             }
-            buttonSearch = new JButton("Retour au listing");
-            add(buttonSearch,BorderLayout.CENTER);
+            buttonBackToListing = new JButton("Retour au listing");
+            buttonBackToListing.addActionListener(this);
+            add(buttonBackToListing,BorderLayout.SOUTH);
             revalidate();
             repaint();
         } else if (e.getActionCommand().equals("Retour au listing")){
             removeAll();
-
+            setLayout(new BorderLayout());
+            panel = new JPanel(new GridLayout(0,4));
+            panel.add(speciesLabel);
+            panel.add(speciesJComboBoxBox);
+            buttonSearch = new JButton("Rechercher");
+            buttonSearch.addActionListener(this);
+            panel.add(buttonSearch);
+            add(panel,BorderLayout.NORTH);
             revalidate();
             repaint();
         }

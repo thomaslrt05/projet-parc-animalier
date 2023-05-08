@@ -370,7 +370,7 @@ public class DBAccess implements DaoAccess{
             ResultSet data = preparedStatement.executeQuery();
             while (data.next()) {
                 if (!data.wasNull()) {
-                    PreparationSheet preparation = new PreparationSheet(data.getInt("number"), data.getDate("date"), data.getDouble("quantity"), data.getString("posology"), data.getString("creation"),data.getString("attachement"), data.getInt("detail"), data.getString("preparation"));
+                    PreparationSheet preparation = new PreparationSheet(data.getInt("number"), data.getDate("date"), data.getDouble("quantity"), data.getString("posology"), data.getString("creation"),data.getString("attachment"), data.getInt("detail"), data.getString("preparation"));
                     listOfPreparations.add(preparation);
                 }
             }
@@ -383,7 +383,7 @@ public class DBAccess implements DaoAccess{
 
     public void modifyPreparationSheet(int code) throws ModifyPreparationsheetException{
         try {
-            String sqlInstruction = "UPDATE preparationsheet p SET `creation` = 'emp5' WHERE (p.attachment = ?);";
+            String sqlInstruction = "UPDATE preparationsheet p SET `creation` = 'emp5' WHERE (p.number = ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setInt(1, code);
             preparedStatement.executeUpdate();
