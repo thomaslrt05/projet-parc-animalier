@@ -129,7 +129,6 @@ public class ListingPanel extends JPanel implements ActionListener {
             revalidate();
             repaint();
         } else if (e.getActionCommand().equals("Valider")){
-
             PreparationSheet selectedSheet = (PreparationSheet) preparationSheetJComboBox.getSelectedItem();
             try {
                 controller.modifyPreparationsheet(selectedSheet.getNumber());
@@ -138,9 +137,6 @@ public class ListingPanel extends JPanel implements ActionListener {
             catch (ModifyPreparationsheetException  exception){
                 JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
             }
-            buttonBackToListing = new JButton("Retour au listing");
-            buttonBackToListing.addActionListener(this);
-            add(buttonBackToListing,BorderLayout.SOUTH);
             revalidate();
             repaint();
         } else if (e.getActionCommand().equals("Retour au listing")){
