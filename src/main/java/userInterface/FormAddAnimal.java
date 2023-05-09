@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class FormAddAnimal extends JPanel implements ActionListener{
-    private JLabel codeLabel, nameLabel, sexLabel, weightLabel, nickNameLabel, speciesLabel,isDangerousLabel,arrivalDate;
+    private JLabel codeLabel, nameLabel, sexLabel, weightLabel, nickNameLabel, speciesLabel,isDangerousLabel,arrivalDateLabel;
     private JTextField codeField, nameField, weightField, nickNameField;
     private JCheckBox isDangerousBox;
     private JComboBox<Species> speciesCombo;
@@ -47,14 +47,14 @@ public class FormAddAnimal extends JPanel implements ActionListener{
         formPanel.add(nickNameLabel);
         formPanel.add(nickNameField);
 
-        arrivalDate = new JLabel("Date d'arrivé : ");
+        arrivalDateLabel = new JLabel("Date d'arrivé : ");
         model = new SpinnerDateModel();
         spinner = new JSpinner(model);
         JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "dd.MM.yyyy");
         DateFormatter formatter = (DateFormatter)editor.getTextField().getFormatter();
         formatter.setAllowsInvalid(false);
         formatter.setOverwriteMode(true);
-        formPanel.add(arrivalDate);
+        formPanel.add(arrivalDateLabel);
         formPanel.add(spinner);
 
         sexMaleButton = new JRadioButton("Mâle");
@@ -157,10 +157,11 @@ public class FormAddAnimal extends JPanel implements ActionListener{
                     JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
                     errorDetected = true;
                 }
-                if (!name.matches("[a-zA-Z]+")) {
+                if (!name.matches("[\\p{L}]+")) {
                     JOptionPane.showMessageDialog(null, "Le nom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     errorDetected = true;
                 }
+
 
                 // Vérification nickName
                 if (!nickName.isEmpty()){
@@ -168,7 +169,7 @@ public class FormAddAnimal extends JPanel implements ActionListener{
                         JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
                         errorDetected = true;
                     }
-                    if (!nickName.matches("[a-zA-Z]+")) {
+                    if (!nickName.matches("[\\p{L}]+")) {
                         JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
                         errorDetected = true;
                     }

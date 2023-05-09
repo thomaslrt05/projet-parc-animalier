@@ -393,4 +393,24 @@ public class DBAccess implements DaoAccess{
         }
     }
 
+    public Species getSpecies(String code) throws GetSpeciesException{
+        Species species = null;
+        try {
+            String sqlInstruction = "SELECT s.id, s.label " +
+                    "FROM breed b " +
+                    "LEFT JOIN species s ON b.specification = s.id " +
+                    "WHERE b.id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            ResultSet data = preparedStatement.executeQuery();
+            if (data.next()) {
+                species = new Species(data.getString("id"), data.getString("label"));
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Species\"";
+            throw new GetSpeciesException(message);
+        }
+        return species;
+    }
+
 }

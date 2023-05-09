@@ -78,4 +78,8 @@ public class Manager {
     public void modifyPreparationSheet(int code) throws ModifyPreparationsheetException{
         dao.modifyPreparationSheet(code);
     }
+
+    public Species getSpecies(String code) throws GetSpeciesException{
+        return dao.getSpecies(code);
+    }
 }

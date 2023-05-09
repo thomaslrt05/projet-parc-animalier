@@ -4,6 +4,9 @@ import Exceptions.AddAnimalException;
 import model.*;
 import Exceptions.*;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface DaoAccess {
@@ -25,6 +28,7 @@ public interface DaoAccess {
     public ArrayList<Animal> getAnimalsBySpecies(String codeAnimal) throws GetAnimalsException;
     public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException;
     public void modifyPreparationSheet(int code) throws ModifyPreparationsheetException;
+    public Species getSpecies(String code) throws GetSpeciesException;
 
 
 

@@ -81,4 +81,8 @@ public class ApplicationController {
     public void modifyPreparationsheet(int code) throws ModifyPreparationsheetException{
         manager.modifyPreparationSheet(code);
     }
+
+    public Species getSpecies(String code) throws GetSpeciesException{
+        return manager.getSpecies(code);
+    }
 }

@@ -15,7 +15,7 @@ import java.util.Date;
 public class ModifyPanel extends JPanel implements ActionListener{
     private JComboBox<Animal> comboBox;
     private JPanel panel,formPanel;
-    private JLabel animalLabel, nameLabel, sexLabel, weightLabel, nickNameLabel, speciesLabel,isDangerousLabel,arrivalDate;
+    private JLabel animalLabel, nameLabel, sexLabel, weightLabel, nickNameLabel, speciesLabel,isDangerousLabel,arrivalDateLabel;
     private JTextField nameField, weightField, nickNameField;
     private ApplicationController controller;
     private ArrayList<Animal> animalList;
@@ -28,6 +28,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
     private JSpinner spinner;
     private SpinnerDateModel model;
     private ArrayList<Species> speciesList;
+    private Species currentSpecies,matchingSpecies;
 
     public ModifyPanel(){
         controller = new ApplicationController();
@@ -79,7 +80,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
             formPanel.add(nickNameField);
 
 
-            arrivalDate = new JLabel("Date d'arrivé : ");
+            arrivalDateLabel = new JLabel("Date d'arrivé : ");
             model = new SpinnerDateModel();
             model.setValue(selectedAnimal.getArrivalDate());
             spinner = new JSpinner(model);
@@ -87,7 +88,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
             DateFormatter formatter = (DateFormatter)editor.getTextField().getFormatter();
             formatter.setAllowsInvalid(false);
             formatter.setOverwriteMode(true);
-            formPanel.add(arrivalDate);
+            formPanel.add(arrivalDateLabel);
             formPanel.add(spinner);
 
             sexMaleButton = new JRadioButton("Mâle");
@@ -130,7 +131,23 @@ public class ModifyPanel extends JPanel implements ActionListener{
             }catch (ListSpeciesException exception){
                 JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
             }
-            speciesCombo.setSelectedItem(selectedAnimal.getBreed());
+
+            try {
+                currentSpecies = controller.getSpecies(selectedAnimal.getBreed());
+            }catch (GetSpeciesException exception){
+                JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+            }
+
+
+            matchingSpecies = speciesList.stream()
+                    .filter(species -> species.getId().equals(currentSpecies.getId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (matchingSpecies != null) {
+                speciesCombo.setSelectedItem(matchingSpecies);
+            }
+
             formPanel.add(speciesLabel);
             formPanel.add(speciesCombo);
 
@@ -173,7 +190,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
                     JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
                     errorDetected = true;
                 }
-                if (!name.matches("[a-zA-Z]+")) {
+                if (!name.matches("[\\p{L}]+")) {
                     JOptionPane.showMessageDialog(null, "Le nom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     errorDetected = true;
                 }
@@ -184,7 +201,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
                         JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
                         errorDetected = true;
                     }
-                    if (!nickName.matches("[a-zA-Z]+")) {
+                    if (!nickName.matches("[\\p{L}]+")) {
                         JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
                         errorDetected = true;
                     }
