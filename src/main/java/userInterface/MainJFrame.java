@@ -25,17 +25,20 @@ public class MainJFrame extends JFrame implements ActionListener {
         container.add(panel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Gestion Parc Animalier");
-        setSize(600, 400);
+        setSize(800, 600);
 
         JMenuBar menuBar = new JMenuBar();
 
         JMenu applicationMenu = new JMenu("Application");
         JMenu animalMenu = new JMenu("Animal");
-        JMenu researchMenu = new JMenu("Research");
+        JMenu researchMenu = new JMenu("Recherche");
+        JMenuItem preparationMenu = new JMenu("Fiche de préparation");
+
 
         menuBar.add(applicationMenu);
         menuBar.add(animalMenu);
         menuBar.add(researchMenu);
+        menuBar.add(preparationMenu);
 
         JMenuItem backToMainFrame = new JMenuItem("Retour à la fenêtre principal");
         JMenuItem inscriptionMenuItem = new JMenuItem("Inscription");
@@ -45,6 +48,7 @@ public class MainJFrame extends JFrame implements ActionListener {
         JMenuItem speciesMenuItem = new JMenuItem("Par espèce");
         JMenuItem fonctionMenuItem = new JMenuItem("Par fonction");
         JMenuItem medicineMenuItem = new JMenuItem("Par médicament");
+        JMenuItem validatePreparation = new JMenuItem("Valider une préparation");
 
         applicationMenu.add(backToMainFrame);
         animalMenu.add(inscriptionMenuItem);
@@ -54,6 +58,7 @@ public class MainJFrame extends JFrame implements ActionListener {
         researchMenu.add(speciesMenuItem);
         researchMenu.add(fonctionMenuItem);
         researchMenu.add(medicineMenuItem);
+        preparationMenu.add(validatePreparation);
 
         backToMainFrame.addActionListener(this);
         inscriptionMenuItem.addActionListener(this);
@@ -63,6 +68,7 @@ public class MainJFrame extends JFrame implements ActionListener {
         speciesMenuItem.addActionListener(this);
         fonctionMenuItem.addActionListener(this);
         medicineMenuItem.addActionListener(this);
+        validatePreparation.addActionListener(this);
 
         setJMenuBar(menuBar);
 
@@ -137,6 +143,12 @@ public class MainJFrame extends JFrame implements ActionListener {
             panel.add(new JLabel("Gestion du parc animalier"));
             panel.add(animation.getPanel(),BorderLayout.CENTER);
             panel.revalidate();
-        }
+        } else if (e.getActionCommand().equals("Valider une préparation")) {
+          PreparationPanel preparationPanel = new PreparationPanel();
+          panel.removeAll();
+          panel.setLayout(new BorderLayout());
+          panel.add(preparationPanel,BorderLayout.CENTER);
+          panel.revalidate();
+      }
     }
 }

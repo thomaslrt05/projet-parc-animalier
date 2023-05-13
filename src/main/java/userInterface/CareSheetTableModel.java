@@ -12,7 +12,7 @@ public class CareSheetTableModel extends AbstractTableModel {
 
     public CareSheetTableModel(ArrayList<CareSheetResearch> contents) {
         this.columnNames = new ArrayList<>();
-        columnNames.add("Espèce");
+        columnNames.add("Intitulé fiche de soin");
         columnNames.add("Code");
         columnNames.add("Nom");
         columnNames.add("Race");

@@ -1,13 +1,15 @@
 package userInterface;
 import model.*;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.Date;
-public class ListingPreparationModel extends AbstractTableModel{
+
+public class PreparationTableModel extends AbstractTableModel {
     private ArrayList<String> columnNames;
     private ArrayList<PreparationSheet> contents;
 
-    public ListingPreparationModel(ArrayList<PreparationSheet> contents) {
+    public PreparationTableModel(ArrayList<PreparationSheet> contents) {
         this.columnNames = new ArrayList<>();
         columnNames.add("Numéro");
         columnNames.add("Date");

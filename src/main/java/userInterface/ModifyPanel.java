@@ -164,106 +164,117 @@ public class ModifyPanel extends JPanel implements ActionListener{
             repaint();
         }
         else if (e.getActionCommand().equals("Modifier")){
-            Boolean errorDetected = false;
+            String name = nameField.getText();
+            Gender sex = (sexMaleButton.isSelected()) ? Gender.M : Gender.F;
+            Species speciesSelected = (Species) speciesCombo.getSelectedItem();
+            Breed breedSelected = null;
             try {
-                String name = nameField.getText();
-                Gender sex = (sexMaleButton.isSelected()) ? Gender.M : Gender.F;
-                Species speciesSelected = (Species) speciesCombo.getSelectedItem();
-                Breed breedSelected = null;
-                try {
-                    breedSelected = controller.getBreed(speciesSelected.getId());
-                }catch (GetBreedException exception){
-                    JOptionPane.showMessageDialog(null, exception.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-                }
-                String breed = breedSelected.getId();
+                breedSelected = controller.getBreed(speciesSelected.getId());
+            }catch (GetBreedException exception){
+                JOptionPane.showMessageDialog(null, exception.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+            String breed = breedSelected.getId();
 
-                Boolean isDangerous = isDangerousBox.isSelected();
-                String weightInformation = weightField.getText();
-                Date arrivalDate = model.getDate();
-                String nickName = nickNameField.getText();
-                if(nickNameField.getText().isEmpty()){
-                    nickName = "";
-                }
+            Boolean isDangerous = isDangerousBox.isSelected();
+            String weightInformation = weightField.getText();
+            Date arrivalDate = model.getDate();
+            String nickName = nickNameField.getText();
 
-                // Vérification nom
-                if (name.length() > 20 || name.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
+
+
+            Animal animalModified;
+            double weight = 0;
+
+            if (name.length() > 20 || name.isEmpty()) {
+                JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
+            }else {
                 if (!name.matches("[\\p{L}]+")) {
                     JOptionPane.showMessageDialog(null, "Le nom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
+                }else {
 
-                // Vérification nickName
-                if (!nickName.isEmpty()){
-                    if (nickName.length() > 20) {
-                        JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
-                        errorDetected = true;
-                    }
-                    if (!nickName.matches("[\\p{L}]+")) {
-                        JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                        errorDetected = true;
-                    }
-                }
-                // Vérification poids
-                double weight = 0;
-                if(weightInformation.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"Le poids ne doit pas être vide","Erreur",JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                } else {
-                    weight = Double.parseDouble(weightInformation);
-                    if (!weightInformation.matches("\\d+(\\.\\d+)?")) {
-                        JOptionPane.showMessageDialog(null, "Le champ poids doit contenir seulement des chiffres.","Erreur",JOptionPane.ERROR_MESSAGE);
-                        errorDetected = true;
-                    }
-                    if (weight < 0) {
-                        JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
-                        errorDetected = true;
-                    }
-                }
-                // Vérification date
-                Date now = new Date();
-                if (arrivalDate.after(now)) {
-                    JOptionPane.showMessageDialog(null, "La date d'arrivée doit être antérieure ou égale à la date courante.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
+                    if(weightInformation.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,"Le poids ne doit pas être vide","Erreur",JOptionPane.ERROR_MESSAGE);
+                    }else {
+                        if (!weightInformation.matches("-?\\d+(\\.\\d+)?")) {
+                            JOptionPane.showMessageDialog(null, "Le champ poids doit contenir seulement des chiffres.","Erreur",JOptionPane.ERROR_MESSAGE);
+                        }else {
+                            weight = Double.parseDouble(weightInformation);
+                            if (weight < 0) {
+                                JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
+                            }else {
 
-                if(!errorDetected){
-                    try {
-                        Animal animalEdited;
+                                Date now = new Date();
+                                if (arrivalDate.after(now)) {
+                                    JOptionPane.showMessageDialog(null, "La date d'arrivée doit être antérieure ou égale à la date courante.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                }else {
+                                    if (!nickName.isEmpty()){
+                                        if (nickName.length() > 20) {
+                                            JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
+                                        }else {
+                                            if (!nickName.matches("[\\p{L}]+")) {
+                                                JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                            }else {
+                                                try {
+                                                    animalModified = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                                                    controller.modifyAnimal(animalModified);
+                                                    JOptionPane.showMessageDialog(null,"La modification de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
+                                                    removeAll();
+                                                    add(panel,BorderLayout.NORTH);
+                                                    animalList.clear();
+                                                    comboBox = new JComboBox<>();
+                                                    try {
+                                                        animalList = controller.getAllAnimals();
+                                                    }catch (GetAllAnimalsException exception){
+                                                        JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                                                    }
+                                                    for (Animal animal: animalList) {
+                                                        comboBox.addItem(animal);
+                                                    }
+                                                    panel.add(animalLabel);
+                                                    panel.add(comboBox);
+                                                    panel.add(button);
+                                                    revalidate();
+                                                    repaint();
+                                                }
+                                                catch (ModifyAnimalException exception){
+                                                    JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                                                }
+                                            }
+                                        }
 
-                        if(nickName.isEmpty()){
-                            animalEdited = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed);
-                        } else {
-                            animalEdited = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                                    }else {
+                                        try {
+                                            animalModified = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed);
+                                            controller.modifyAnimal(animalModified);
+                                            JOptionPane.showMessageDialog(null,"La modification de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
+                                            removeAll();
+                                            add(panel,BorderLayout.NORTH);
+                                            animalList.clear();
+                                            comboBox = new JComboBox<>();
+                                            try {
+                                                animalList = controller.getAllAnimals();
+                                            }catch (GetAllAnimalsException exception){
+                                                JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                                            }
+                                            for (Animal animal: animalList) {
+                                                comboBox.addItem(animal);
+                                            }
+                                            panel.add(animalLabel);
+                                            panel.add(comboBox);
+                                            panel.add(button);
+                                            revalidate();
+                                            repaint();
+                                        }
+                                        catch (ModifyAnimalException exception){
+                                            JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }
+
+                                }
+                            }
                         }
-                        controller.modifyAnimal(animalEdited);
-                        removeAll();
-                        add(panel,BorderLayout.NORTH);
-                        animalList.clear();
-                        comboBox = new JComboBox<>();
-                        try {
-                            animalList = controller.getAllAnimals();
-                        }catch (GetAllAnimalsException exception){
-                            JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
-                        }
-                        for (Animal animal: animalList) {
-                            comboBox.addItem(animal);
-                        }
-                        panel.add(animalLabel);
-                        panel.add(comboBox);
-                        panel.add(button);
-                        JOptionPane.showMessageDialog (null, "L'animal a bien été modifié", "Réussite", JOptionPane.INFORMATION_MESSAGE);
-                        revalidate();
-                        repaint();
-                    }
-                    catch (ModifyAnimalException exception){
-                        JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                     }
                 }
-            } catch (IllegalArgumentException ex){
-                JOptionPane.showMessageDialog(panel, ex.getMessage(), "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
             }
         } else if (e.getActionCommand().equals("Annuler")) {
             removeAll();

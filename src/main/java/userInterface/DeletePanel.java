@@ -47,14 +47,15 @@ public class DeletePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         Animal selectedAnimal = (Animal) comboBox.getSelectedItem();
-        try {
-            controller.deleteAnimal(selectedAnimal.getCode());
-            comboBox.removeItemAt(comboBox.getSelectedIndex());
-            JOptionPane.showMessageDialog (null, "L'animal a bien été supprimé", "Réussite", JOptionPane.INFORMATION_MESSAGE);
-        }catch (DeleteAnimalException exception){
-            JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+        int dialogResult = JOptionPane.showConfirmDialog(this, "Êtes-vous sûr de vouloir supprimer cet animal ? Cela entraînera la suppression de toutes les données le concernant.", "Confirmation de suppression", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION){
+            try {
+                controller.deleteAnimal(selectedAnimal.getCode());
+                comboBox.removeItemAt(comboBox.getSelectedIndex());
+                JOptionPane.showMessageDialog (null, "L'animal a bien été supprimé", "Réussite", JOptionPane.INFORMATION_MESSAGE);
+            }catch (DeleteAnimalException exception){
+                JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+            }
         }
-
-
     }
 }

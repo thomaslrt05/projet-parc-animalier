@@ -207,7 +207,14 @@ public class DBAccess implements DaoAccess{
 
     public void deleteAnimal(String code) throws DeleteAnimalException {
         try {
-            String sqlInstruction = "DELETE FROM animal WHERE code = ?";
+            String sqlInstruction = "DELETE cs, tr, r, m, ps\n" +
+                    "FROM animal a\n" +
+                    "LEFT JOIN caresheet cs ON a.code = cs.animal\n" +
+                    "LEFT JOIN treatment tr ON a.code = tr.animal\n" +
+                    "LEFT JOIN remark r ON a.code = r.animal\n" +
+                    "LEFT JOIN modification m ON a.code = m.animal\n" +
+                    "LEFT JOIN preparationsheet ps ON a.code = ps.attachment\n" +
+                    "WHERE a.code = ?\n";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, code);
             preparedStatement.executeUpdate();

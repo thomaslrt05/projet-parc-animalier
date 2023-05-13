@@ -134,94 +134,83 @@ public class FormAddAnimal extends JPanel implements ActionListener{
                 nickName = "";
             }
 
-            Boolean errorDetected = false;
+            // Vérification nickName
+            if (!nickName.isEmpty()){
+                if (nickName.length() > 20) {
+                    JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
+
+                }
+                if (!nickName.matches("[\\p{L}]+")) {
+                    JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
+
+                }
+            }
+
+            double weight = 0;
+            // Vérification code
+            Boolean codeAlreadyUse = false;
             try {
-                // Vérification code
-                Boolean animalExist = false;
-                try {
-                    animalExist = controller.animalExists(code);
-                }catch (AnimalExistsException exception){
-                    JOptionPane.showMessageDialog(null, exception.getMessage(), "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
-                }
-                if(animalExist){
-                    JOptionPane.showMessageDialog(null,"Le code unique est déjà utilisé par un autre animal.","Erreur",JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
-
+                codeAlreadyUse = controller.animalExists(code);
+            }catch (AnimalExistsException exception){
+                JOptionPane.showMessageDialog(null, exception.getMessage(), "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
+            }
+            if(codeAlreadyUse){
+                JOptionPane.showMessageDialog(null,"Le code unique est déjà utilisé par un autre animal.","Erreur",JOptionPane.ERROR_MESSAGE);
+            }else {
                 if (code.length() > 20 || code.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
-                // Vérification nom
-                if (name.length() > 20 || name.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
-                if (!name.matches("[\\p{L}]+")) {
-                    JOptionPane.showMessageDialog(null, "Le nom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
-
-
-                // Vérification nickName
-                if (!nickName.isEmpty()){
-                    if (nickName.length() > 20) {
+                    JOptionPane.showMessageDialog(null,"Le code doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
+                }else {
+                    // Vérification nom
+                    if (name.length() > 20 || name.isEmpty()) {
                         JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
-                        errorDetected = true;
-                    }
-                    if (!nickName.matches("[\\p{L}]+")) {
-                        JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                        errorDetected = true;
-                    }
-                }
-                // Vérification poids
-                double weight = 0;
-                if(weightInformation.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"Le poids ne doit pas être vide","Erreur",JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                } else {
-                    weight = Double.parseDouble(weightInformation);
-                    if (!weightInformation.matches("\\d+(\\.\\d+)?")) {
-                        JOptionPane.showMessageDialog(null, "Le champ poids doit contenir seulement des chiffres.","Erreur",JOptionPane.ERROR_MESSAGE);
-                        errorDetected = true;
-                    }
-                    if (weight < 0) {
-                        JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
-                        errorDetected = true;
-                    }
-                }
-                // Vérification date
-                Date now = new Date();
-                if (arrivalDate.after(now)) {
-                    JOptionPane.showMessageDialog(null, "La date d'arrivée doit être antérieure ou égale à la date courante.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                    errorDetected = true;
-                }
+                    }else {
+                        if (!name.matches("[\\p{L}]+")) {
+                            JOptionPane.showMessageDialog(null, "Le nom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }else {
+                            // Vérification poids
+                            if(weightInformation.isEmpty()) {
+                                JOptionPane.showMessageDialog(null,"Le poids ne doit pas être vide","Erreur",JOptionPane.ERROR_MESSAGE);
+                            }else {
+                                if (!weightInformation.matches("-?\\d+(\\.\\d+)?")) {
+                                    JOptionPane.showMessageDialog(null, "Le champ poids doit contenir seulement des chiffres.","Erreur",JOptionPane.ERROR_MESSAGE);
+                                }else {
+                                    weight = Double.parseDouble(weightInformation);
+                                    if (weight < 0) {
+                                        JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
+                                    }else {
+                                        // Vérification date
+                                        Date now = new Date();
+                                        if (arrivalDate.after(now)) {
+                                            JOptionPane.showMessageDialog(null, "La date d'arrivée doit être antérieure ou égale à la date courante.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                        }else {
+                                            try {
+                                                Animal newAnimal;
 
-                if(!errorDetected){
-                    try {
-                        Animal newAnimal;
-
-                        if(nickName.isEmpty()){
-                            newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed);
-                        } else {
-                            newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                                                if(nickName.isEmpty()){
+                                                    newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed);
+                                                } else {
+                                                    newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                                                }
+                                                controller.addAnimal(newAnimal);
+                                                codeField.setText("");
+                                                nameField.setText("");
+                                                weightField.setText("");
+                                                sexFemaleButton.setSelected(false);
+                                                sexMaleButton.setSelected(true);
+                                                nickNameField.setText("");
+                                                JOptionPane.showMessageDialog(null,"L'ajout de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
+                                                revalidate();
+                                            }
+                                            catch (AddAnimalException exception){
+                                                JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        controller.addAnimal(newAnimal);
-                        codeField.setText("");
-                        nameField.setText("");
-                        weightField.setText("");
-                        sexFemaleButton.setSelected(false);
-                        sexMaleButton.setSelected(true);
-                        nickNameField.setText("");
-                        JOptionPane.showMessageDialog(null,"L'ajout de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
-                        revalidate();
-                    }
-                    catch (AddAnimalException exception){
-                        JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                     }
                 }
-            } catch (IllegalArgumentException ex){
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
             }
         }else if (e.getActionCommand().equals("Annuler")){
             codeField.setText("");

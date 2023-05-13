@@ -1,17 +1,14 @@
 package userInterface;
-
-import model.*;
 import model.*;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.Date;
-
-public class ListingAnimalModel extends AbstractTableModel {
+public class AnimalTableModel extends AbstractTableModel{
     private ArrayList<String> columnNames;
     private ArrayList<Animal> contents;
 
-    public ListingAnimalModel(ArrayList<Animal> contents) {
+    public AnimalTableModel(ArrayList<Animal> contents) {
         this.columnNames = new ArrayList<>();
         columnNames.add("Code");
         columnNames.add("Nom");

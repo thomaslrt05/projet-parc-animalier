@@ -15,9 +15,9 @@ public class Animal {
     public Animal(String code, String name,Date date, Gender sex, Boolean isDangerous, double weight,String breed) {
         this.code = code;
         this.name = name;
-        this.sex = sex;
+        setSex(sex);
         this.isDangerous = isDangerous;
-        this.weight = weight;
+        setWeight(weight);
         this.breed = breed;
         this.arrivalDate = date;
     }
@@ -26,14 +26,30 @@ public class Animal {
     public Animal(String code, String name,Date date, Gender sex, Boolean isDangerous, double weight,String breed, String nickName) {
         this.code = code;
         this.name = name;
-        this.sex = sex;
+        setSex(sex);
         this.isDangerous = isDangerous;
-        this.weight = weight;
+        setWeight(weight);
         this.nickName = nickName;
         this.breed = breed;
         this.arrivalDate = date;
     }
 
+    public void setSex(Gender sex) {
+        if(sex == Gender.M){
+            this.sex = Gender.M;
+        }else {
+            this.sex = Gender.F;
+        }
+    }
+
+    public void setWeight(double weight) {
+        if(weight < 0){
+            this.weight = 5;
+        }else {
+            this.weight = weight;
+        }
+        this.weight = weight;
+    }
 
     public String getCode() {
         return code;
