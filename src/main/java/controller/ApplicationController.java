@@ -78,11 +78,15 @@ public class ApplicationController {
         return manager.getListPreparations(code);
     }
 
-    public void modifyPreparationsheet(int code) throws ModifyPreparationsheetException{
-        manager.modifyPreparationSheet(code);
+    public void modifyPreparationsheet(String employeId,int code) throws ModifyPreparationsheetException{
+        manager.modifyPreparationSheet(employeId,code);
     }
 
     public Species getSpecies(String code) throws GetSpeciesException{
         return manager.getSpecies(code);
+    }
+
+    public ArrayList<Employee> listEmployees() throws ListEmployeesException{
+        return manager.listEmployees();
     }
 }

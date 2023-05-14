@@ -27,9 +27,9 @@ public interface DaoAccess {
     public Breed getBreed(String species) throws GetBreedException;
     public ArrayList<Animal> getAnimalsBySpecies(String codeAnimal) throws GetAnimalsException;
     public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException;
-    public void modifyPreparationSheet(int code) throws ModifyPreparationsheetException;
+    public void modifyPreparationSheet(String employeId,int code) throws ModifyPreparationsheetException;
     public Species getSpecies(String code) throws GetSpeciesException;
-
+    public ArrayList<Employee> listEmployees() throws ListEmployeesException;
 
 
 }

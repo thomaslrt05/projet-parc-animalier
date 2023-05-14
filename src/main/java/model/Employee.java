@@ -15,9 +15,28 @@ public class Employee {
         this.position = position;
     }
 
-    public String getAuthor(){
-        return this.lastName + " " + this.firstName.charAt(0);
+    public String getMatricule() {
+        return matricule;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    @Override
+    public String toString(){
+        return lastName + " " + firstName.charAt(0) + ".  (" + matricule + " )";
+    }
 }

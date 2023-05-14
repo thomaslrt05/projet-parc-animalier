@@ -207,12 +207,21 @@ public class DBAccess implements DaoAccess{
 
     public void deleteAnimal(String code) throws DeleteAnimalException {
         try {
-            String sqlInstruction = "DELETE FROM caresheet\n" +
-                    "WHERE animal IN (\n" +
+            String sqlInstruction = "DELETE FROM preparationsheet WHERE detail IN \n" +
+                    "(SELECT idCare FROM treatment WHERE date IN \n" +
+                    "(SELECT date FROM caresheet WHERE animal = ?));";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            preparedStatement.executeUpdate();
+
+
+            sqlInstruction = "DELETE FROM preparationsheet\n" +
+                    "WHERE attachment IN (\n" +
                     "    SELECT code FROM animal\n" +
                     "    WHERE code = ? \n" +
-                    ");\n";
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+                    ");";
+            preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, code);
             preparedStatement.executeUpdate();
 
@@ -244,14 +253,16 @@ public class DBAccess implements DaoAccess{
             preparedStatement.setString(1, code);
             preparedStatement.executeUpdate();
 
-            sqlInstruction = "DELETE FROM preparationsheet\n" +
-                    "WHERE attachment IN (\n" +
+
+            sqlInstruction = "DELETE FROM caresheet\n" +
+                    "WHERE animal IN (\n" +
                     "    SELECT code FROM animal\n" +
                     "    WHERE code = ? \n" +
-                    ");";
+                    ");\n";
             preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, code);
             preparedStatement.executeUpdate();
+
 
             sqlInstruction = "DELETE FROM animal\n" +
                     "WHERE code = ?;";
@@ -429,11 +440,12 @@ public class DBAccess implements DaoAccess{
         return listOfPreparations;
     }
 
-    public void modifyPreparationSheet(int code) throws ModifyPreparationsheetException{
+    public void modifyPreparationSheet(String employeId, int code) throws ModifyPreparationsheetException{
         try {
-            String sqlInstruction = "UPDATE preparationsheet p SET `creation` = 'emp5' WHERE (p.number = ?);";
+            String sqlInstruction = "UPDATE preparationsheet p SET `creation` = ? WHERE (p.number = ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setInt(1, code);
+            preparedStatement.setString(1, employeId);
+            preparedStatement.setInt(2, code);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             String message = "Impossible de modifier cette fiche";
@@ -459,6 +471,31 @@ public class DBAccess implements DaoAccess{
             throw new GetSpeciesException(message);
         }
         return species;
+    }
+
+    public ArrayList<Employee> listEmployees() throws ListEmployeesException {
+        ArrayList<Employee> listOfEmployees = new ArrayList<Employee>();
+        try {
+            String sqlInstruction = "SELECT * FROM employee;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            while (data.next()) {
+                if (!data.wasNull()) {
+                    Employee employee = new Employee(data.getString("matricule"),
+                            data.getString("lastName"),
+                            data.getString("firstName"),
+                            data.getString("supervisor"),
+                            data.getString("position"));
+                    listOfEmployees.add(employee);
+                }
+            }
+        } catch (SQLException e) {
+            String message = "Impossible de récuperer les données de la table \"Employee\"";
+            throw new ListEmployeesException(message);
+        }
+        return listOfEmployees;
     }
 
 }

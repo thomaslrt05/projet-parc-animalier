@@ -75,11 +75,15 @@ public class Manager {
     public ArrayList<PreparationSheet> getListPreparations(String code) throws ListPreparationsException{
         return dao.getListPreparations(code);
     }
-    public void modifyPreparationSheet(int code) throws ModifyPreparationsheetException{
-        dao.modifyPreparationSheet(code);
+    public void modifyPreparationSheet(String employeId,int code) throws ModifyPreparationsheetException{
+        dao.modifyPreparationSheet(employeId,code);
     }
 
     public Species getSpecies(String code) throws GetSpeciesException{
         return dao.getSpecies(code);
+    }
+
+    public ArrayList<Employee> listEmployees() throws ListEmployeesException{
+        return dao.listEmployees();
     }
 }
