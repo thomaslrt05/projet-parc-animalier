@@ -207,17 +207,58 @@ public class DBAccess implements DaoAccess{
 
     public void deleteAnimal(String code) throws DeleteAnimalException {
         try {
-            String sqlInstruction = "DELETE cs, tr, r, m, ps\n" +
-                    "FROM animal a\n" +
-                    "LEFT JOIN caresheet cs ON a.code = cs.animal\n" +
-                    "LEFT JOIN treatment tr ON a.code = tr.animal\n" +
-                    "LEFT JOIN remark r ON a.code = r.animal\n" +
-                    "LEFT JOIN modification m ON a.code = m.animal\n" +
-                    "LEFT JOIN preparationsheet ps ON a.code = ps.attachment\n" +
-                    "WHERE a.code = ?\n";
+            String sqlInstruction = "DELETE FROM caresheet\n" +
+                    "WHERE animal IN (\n" +
+                    "    SELECT code FROM animal\n" +
+                    "    WHERE code = ? \n" +
+                    ");\n";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, code);
             preparedStatement.executeUpdate();
+
+
+            sqlInstruction = "DELETE FROM treatment\n" +
+                    "WHERE animal IN (\n" +
+                    "    SELECT code FROM animal\n" +
+                    "    WHERE code = ? \n" +
+                    ");";
+            preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            preparedStatement.executeUpdate();
+
+            sqlInstruction = "DELETE FROM remark\n" +
+                    "WHERE animal IN (\n" +
+                    "    SELECT code FROM animal\n" +
+                    "    WHERE code = ?\n" +
+                    ");";
+            preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            preparedStatement.executeUpdate();
+
+            sqlInstruction = "DELETE FROM modification\n" +
+                    "WHERE animal IN (\n" +
+                    "    SELECT code FROM animal\n" +
+                    "    WHERE code = ? \n" +
+                    ");";
+            preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            preparedStatement.executeUpdate();
+
+            sqlInstruction = "DELETE FROM preparationsheet\n" +
+                    "WHERE attachment IN (\n" +
+                    "    SELECT code FROM animal\n" +
+                    "    WHERE code = ? \n" +
+                    ");";
+            preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            preparedStatement.executeUpdate();
+
+            sqlInstruction = "DELETE FROM animal\n" +
+                    "WHERE code = ?;";
+            preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setString(1, code);
+            preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             String message = "Impossible de supprimer cet animal";
             throw new DeleteAnimalException(message);
