@@ -1,7 +1,7 @@
 package userInterface;
 
-import Exceptions.ListSpeciesException;
-import controller.ApplicationController;
+
+
 import model.*;
 import controller.*;
 import Exceptions.*;
@@ -29,27 +29,25 @@ public class MedicinePanel extends JPanel implements ActionListener {
         medicinesList = new ArrayList<>();
         try {
             medicinesList = controller.listMedicine();
+            data = new ArrayList<>();
+
+            setLayout(new BorderLayout());
+            panel = new JPanel(new GridLayout(0,4));
+            speciesLabel = new JLabel("Médicament :");
+            panel.add(speciesLabel);
+
+            comboBox = new JComboBox<>();
+            for (Medicine medicine: medicinesList) {
+                comboBox.addItem(medicine);
+            }
+            panel.add(comboBox);
+            button = new JButton("Recherche");
+            button.addActionListener(this);
+            panel.add(button);
+            add(panel,BorderLayout.NORTH);
         }catch (ListMedicineException e){
             JOptionPane.showMessageDialog(null,e.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
-
-        data = new ArrayList<>();
-
-        setLayout(new BorderLayout());
-        panel = new JPanel(new GridLayout(0,4));
-        speciesLabel = new JLabel("Médicament :");
-        panel.add(speciesLabel);
-
-        comboBox = new JComboBox<>();
-        for (Medicine medicine: medicinesList) {
-            comboBox.addItem(medicine);
-        }
-        panel.add(comboBox);
-        button = new JButton("Recherche");
-        button.addActionListener(this);
-        panel.add(button);
-        add(panel,BorderLayout.NORTH);
-
     }
 
     public void actionPerformed(ActionEvent e) {

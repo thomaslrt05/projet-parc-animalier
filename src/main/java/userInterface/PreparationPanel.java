@@ -64,34 +64,30 @@ public class PreparationPanel extends JPanel implements ActionListener{
                 scrollPanel = new JScrollPane (jTable);
                 animalLabel = new JLabel("Animal choisi : ");
                 animalSpecific = new ArrayList<>();
-
                 try {
                     animalSpecific = controller.getAnimalsBySpecies(selectedSpecies.getId());
+                    animalJComboBox = new JComboBox<>();
+
+                    for (Animal animal : animalSpecific){
+                        animalJComboBox.addItem(animal);
+                    }
+                    buttonSearch = new JButton("Afficher ses préparations");
+                    buttonSearch.addActionListener(this);
+                    buttonBackToListing = new JButton("Retour au listing");
+                    buttonBackToListing.addActionListener(this);
+                    animalPanel = new JPanel();
+                    animalPanel.add(animalLabel,BorderLayout.SOUTH);
+                    animalPanel.add(animalJComboBox,BorderLayout.SOUTH);
+                    animalPanel.add(buttonSearch,BorderLayout.SOUTH);
+                    animalPanel.add(buttonBackToListing);
+
+                    add(scrollPanel, BorderLayout.CENTER);
+                    add(animalPanel,BorderLayout.SOUTH);
+                    revalidate();
+                    repaint();
                 }catch (GetAnimalsException exception){
                     JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                 }
-                animalJComboBox = new JComboBox<>();
-
-                for (Animal animal : animalSpecific){
-                    animalJComboBox.addItem(animal);
-                }
-
-
-
-                buttonSearch = new JButton("Afficher ses préparations");
-                buttonSearch.addActionListener(this);
-                buttonBackToListing = new JButton("Retour au listing");
-                buttonBackToListing.addActionListener(this);
-                animalPanel = new JPanel();
-                animalPanel.add(animalLabel,BorderLayout.SOUTH);
-                animalPanel.add(animalJComboBox,BorderLayout.SOUTH);
-                animalPanel.add(buttonSearch,BorderLayout.SOUTH);
-                animalPanel.add(buttonBackToListing);
-
-                add(scrollPanel, BorderLayout.CENTER);
-                add(animalPanel,BorderLayout.SOUTH);
-                revalidate();
-                repaint();
             }catch (GetAnimalsException exception){
                 JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
             }
@@ -151,25 +147,28 @@ public class PreparationPanel extends JPanel implements ActionListener{
         } else if (e.getActionCommand().equals("Valider")){
             PreparationSheet selectedSheet = (PreparationSheet) preparationSheetJComboBox.getSelectedItem();
             Employee selectedEmployee = (Employee) employeeJComboBox.getSelectedItem();
-            try {
-                controller.modifyPreparationsheet(selectedEmployee.getMatricule(),selectedSheet.getNumber());
-                JOptionPane.showMessageDialog(null,"La fiche a été mise a jour","Réussite",JOptionPane.INFORMATION_MESSAGE);
-                removeAll();
-                setLayout(new BorderLayout());
-                panel = new JPanel(new GridLayout(0,4));
-                panel.add(speciesLabel);
-                panel.add(speciesJComboBoxBox);
-                buttonSearch = new JButton("Rechercher");
-                buttonSearch.addActionListener(this);
-                panel.add(buttonSearch);
-                add(panel,BorderLayout.NORTH);
-                revalidate();
-                repaint();
+            if(selectedSheet == null ) {
+                JOptionPane.showMessageDialog(null,"Il n'y a aucune préparation pour cet l'animal.","Erreur",JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    controller.modifyPreparationsheet(selectedEmployee.getMatricule(),selectedSheet.getNumber());
+                    JOptionPane.showMessageDialog(null,"La fiche a été mise a jour","Réussite",JOptionPane.INFORMATION_MESSAGE);
+                    removeAll();
+                    setLayout(new BorderLayout());
+                    panel = new JPanel(new GridLayout(0,4));
+                    panel.add(speciesLabel);
+                    panel.add(speciesJComboBoxBox);
+                    buttonSearch = new JButton("Rechercher");
+                    buttonSearch.addActionListener(this);
+                    panel.add(buttonSearch);
+                    add(panel,BorderLayout.NORTH);
+                    revalidate();
+                    repaint();
+                }
+                catch (ModifyPreparationsheetException  exception){
+                    JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                }
             }
-            catch (ModifyPreparationsheetException  exception){
-                JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
-            }
-
         } else if (e.getActionCommand().equals("Retour au listing")){
             removeAll();
             setLayout(new BorderLayout());

@@ -1,5 +1,3 @@
-
-
 INSERT INTO species (id, label)
 VALUES ('s2', 'lion');
 INSERT INTO species (id, label)
@@ -20,6 +18,7 @@ INSERT INTO species (id, label)
 VALUES ('s10', 'tigre');
 INSERT INTO species (id, label)
 VALUES ('s1', 'crocodile');
+
 
 
 INSERT INTO breed (id, label, specification)
@@ -51,6 +50,8 @@ VALUES ('b9', 'indien', 's9');
 
 INSERT INTO breed (id, label, specification)
 VALUES ('b10', 'de sibérie', 's10');
+
+
 
 INSERT INTO animal (code, name, sex, isDangerous, weight, arrivalDate, nickName, breed) 
 VALUES 
@@ -107,7 +108,6 @@ INSERT INTO typeOfCare(id, label) VALUES('ty1', 'soin de base');
 INSERT INTO typeOfCare(id, label) VALUES('ty2', 'soin avancé');
 
 
-
 INSERT INTO employee (matricule, lastName, firstName, supervisor, position)
 VALUES ('emp1', 'Donnateli','Géraldine', null, 'f1');
 
@@ -140,6 +140,7 @@ VALUES ('emp10', 'Moreau', 'Julie', 'emp3', 'f4');
 
 INSERT INTO employee (matricule, lastName, firstName, supervisor, position)
 VALUES ('emp11', 'Zhang', 'Huan', 'emp5', 'f5');
+
 
 
 INSERT INTO caresheet (label, date, animal) VALUES ('Soin quotidient', '2022-10-5', 'a');
@@ -234,6 +235,7 @@ INSERT INTO remark (number, animal, date, description, isMadeByVeterinarian, aut
 VALUES (15, 'p', '2022-06-30', 'Nouvelle vitamine ajoutée à l\'alimentation', true, 'emp1');
 
 
+
 INSERT INTO modification (date, animal, employee)
 VALUES  ('2021-10-05', 'a', 'emp3');
 
@@ -290,43 +292,40 @@ INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail
 VALUES(1, '2022-05-10', 10.5, 'Un fois pas jour', null, 1, 'insulin', 'a');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(2, '2022-05-05', 1, 'Un comprimé 30 minutes avant le repas', null, 1, 'ibuprofen', 'b');
+VALUES(2, '2022-05-05', 1, 'Un comprimé 30 minutes avant le repas', null, 2, 'ibuprofen', 'b');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(3, '2022-05-08', 1, 'Un comprimé à écraser dans la nourriture', null, 1, 'paracetamol', 'f');
+VALUES(3, '2022-05-08', 1, 'Un comprimé à écraser dans la nourriture', null, 5, 'paracetamol', 'f');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
 VALUES(4, '2022-05-11', 2, 'Une fois par jour après le repas', null, 2, 'amoxicillin', 'c');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(5, '2022-05-06', 1.5, 'Un fois par jour avant le repas', null, 2, 'loratadine', 'd');
+VALUES(5, '2022-05-06', 1.5, 'Un fois par jour avant le repas', null, 5, 'loratadine', 'd');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(6, '2022-05-09', 1, 'Une fois par jour avec de l\'eau', null, 2, 'ibuprofen', 'a');
+VALUES(6, '2022-05-09', 1, 'Une fois par jour avec de l\'eau', null, 1, 'ibuprofen', 'a');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(7, '2022-05-12', 0.5, 'Un fois par jour avec de la nourriture', null, 3, 'prednisone', 'a');
+VALUES(7, '2022-05-12', 0.5, 'Un fois par jour avec de la nourriture', null, 1, 'prednisone', 'a');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(8, '2022-05-13', 1, 'Une fois par jour le matin', null, 1, 'paracetamol', 'b');
+VALUES(8, '2022-05-13', 1, 'Une fois par jour le matin', null, 2, 'paracetamol', 'b');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(9, '2022-05-14', 2.5, 'Un fois par jour avec un repas', null, 2, 'prednisone', 'a');
+VALUES(9, '2022-05-14', 2.5, 'Un fois par jour avec un repas', null, 1, 'prednisone', 'a');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(10, '2022-05-15', 0.5, 'Deux fois par jour avant les repas', null, 8, 'insulin', 'b');
+VALUES(10, '2022-05-15', 0.5, 'Deux fois par jour avant les repas', null, 2, 'insulin', 'b');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(11, '2022-05-16', 1, 'Une fois par jour après le repas', null, 9, 'amoxicillin', 'c');
+VALUES(11, '2022-05-16', 1, 'Une fois par jour après le repas', null, 3, 'amoxicillin', 'c');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(12, '2022-05-17', 2, 'Deux fois par jour avec de l\'eau', null, 5, 'loratadine', 'd');
+VALUES(12, '2022-05-17', 2, 'Deux fois par jour avec de l\'eau', null, 4, 'loratadine', 'd');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(13, '2022-05-18', 1.5, 'Un fois par jour avant le coucher', null, 4, 'loratadine', 'c');
+VALUES(13, '2022-05-18', 1.5, 'Un fois par jour avant le coucher', null, 3, 'loratadine', 'c');
 
 INSERT INTO preparationsheet (number, date, quantity, posology, creation, detail, preparation, attachment)
-VALUES(14, '2022-05-19', 1, 'Une fois par jour avec de la nourriture', null, 7, 'prednisone', 'c');
-
-
-
+VALUES(14, '2022-05-19', 1, 'Une fois par jour avec de la nourriture', null, 3, 'prednisone', 'c');

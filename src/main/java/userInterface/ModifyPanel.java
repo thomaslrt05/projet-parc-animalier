@@ -35,24 +35,23 @@ public class ModifyPanel extends JPanel implements ActionListener{
         animalList = new ArrayList<>();
         try {
             animalList = controller.getAllAnimals();
+            setLayout(new BorderLayout());
+            panel = new JPanel(new GridLayout(0,4));
+            animalLabel = new JLabel("Animal : ");
+            panel.add(animalLabel);
+
+            comboBox = new JComboBox<>();
+            for (Animal animal: animalList) {
+                comboBox.addItem(animal);
+            }
+            panel.add(comboBox);
+            button = new JButton("Valider choix");
+            button.addActionListener(this);
+            panel.add(button);
+            add(panel,BorderLayout.NORTH);
         }catch (GetAllAnimalsException exception){
             JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
-
-        setLayout(new BorderLayout());
-        panel = new JPanel(new GridLayout(0,4));
-        animalLabel = new JLabel("Animal : ");
-        panel.add(animalLabel);
-
-        comboBox = new JComboBox<>();
-        for (Animal animal: animalList) {
-            comboBox.addItem(animal);
-        }
-        panel.add(comboBox);
-        button = new JButton("Valider choix");
-        button.addActionListener(this);
-        panel.add(button);
-        add(panel,BorderLayout.NORTH);
     }
 
 
@@ -128,40 +127,37 @@ public class ModifyPanel extends JPanel implements ActionListener{
                 for (Species species: speciesList) {
                     speciesCombo.addItem(species);
                 }
+                try {
+                    currentSpecies = controller.getSpecies(selectedAnimal.getBreed());
+                    matchingSpecies = speciesList.stream()
+                            .filter(species -> species.getId().equals(currentSpecies.getId()))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (matchingSpecies != null) {
+                        speciesCombo.setSelectedItem(matchingSpecies);
+                    }
+
+                    formPanel.add(speciesLabel);
+                    formPanel.add(speciesCombo);
+
+
+                    submitButton = new JButton("Modifier");
+                    cancelButton = new JButton("Annuler");
+                    submitButton.addActionListener(this);
+                    cancelButton.addActionListener(this);
+
+                    formPanel.add(submitButton);
+                    formPanel.add(cancelButton);
+                    add(formPanel,BorderLayout.CENTER);
+                    revalidate();
+                    repaint();
+                }catch (GetSpeciesException exception){
+                    JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                }
             }catch (ListSpeciesException exception){
                 JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
             }
-
-            try {
-                currentSpecies = controller.getSpecies(selectedAnimal.getBreed());
-            }catch (GetSpeciesException exception){
-                JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
-            }
-
-
-            matchingSpecies = speciesList.stream()
-                    .filter(species -> species.getId().equals(currentSpecies.getId()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (matchingSpecies != null) {
-                speciesCombo.setSelectedItem(matchingSpecies);
-            }
-
-            formPanel.add(speciesLabel);
-            formPanel.add(speciesCombo);
-
-
-            submitButton = new JButton("Modifier");
-            cancelButton = new JButton("Annuler");
-            submitButton.addActionListener(this);
-            cancelButton.addActionListener(this);
-
-            formPanel.add(submitButton);
-            formPanel.add(cancelButton);
-            add(formPanel,BorderLayout.CENTER);
-            revalidate();
-            repaint();
         }
         else if (e.getActionCommand().equals("Modifier")){
             String name = nameField.getText();

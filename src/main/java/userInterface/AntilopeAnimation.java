@@ -6,8 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 
 public class AntilopeAnimation extends Thread {
     private JFrame frame;
@@ -22,9 +21,9 @@ public class AntilopeAnimation extends Thread {
 
         try {
             antilopeImage = ImageIO.read(new File("./src/main/ressources/antilope.png"));
-            int antilopeWidth = antilopeImage.getWidth() / 4; // calcul de la largeur de l'antilope affiché à l'écran
-            int antilopeHeight = antilopeImage.getHeight() / 4; // calcul de la hauteur de l'antilope affiché à l'écran
-            antilopePosition = new Point(-antilopeWidth, mainJFrame.getHeight() / 2 - antilopeHeight / 2); // positionnement à gauche de l'écran à la moitié de la hauteur de la JFrame
+            int antilopeWidth = antilopeImage.getWidth() / 4;
+            int antilopeHeight = antilopeImage.getHeight() / 4;
+            antilopePosition = new Point(-antilopeWidth, mainJFrame.getHeight() / 2 - antilopeHeight / 2);
             step = 5;
             running = false;
             panel = new JPanel() {
@@ -33,7 +32,7 @@ public class AntilopeAnimation extends Thread {
                     super.paintComponent(g);
                     Dimension size = mainJFrame.getSize();
                     g.drawImage(antilopeImage, antilopePosition.x, antilopePosition.y, antilopeWidth, antilopeHeight, null);
-                    panel.setBounds(0, 0, size.width, size.height); // utilisation de la taille de la JFrame pour définir les limites du panel
+                    panel.setBounds(0, 0, size.width, size.height);
                     panel.setOpaque(false);
                 }
             };

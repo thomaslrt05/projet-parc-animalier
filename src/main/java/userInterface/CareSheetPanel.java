@@ -1,7 +1,6 @@
 package userInterface;
 
-import Exceptions.CareSheetResearchException;
-import Exceptions.ListSpeciesException;
+import Exceptions.*;
 import controller.ApplicationController;
 import model.*;
 
@@ -59,7 +58,7 @@ public class CareSheetPanel extends JPanel implements ActionListener {
             this.remove(scrollPanel);
         }
 
-        Species selectedSpecies = (Species) comboBox.getSelectedItem(); // info récup avec la compo
+        Species selectedSpecies = (Species) comboBox.getSelectedItem();
         try {
             data = controller.careSheetSearch(selectedSpecies.getId());
             CareSheetTableModel model = new CareSheetTableModel(data);
@@ -67,8 +66,8 @@ public class CareSheetPanel extends JPanel implements ActionListener {
             jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
             jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             scrollPanel = new JScrollPane (jTable);
-            this.add(scrollPanel, BorderLayout.CENTER);
-            this.revalidate();
+            add(scrollPanel, BorderLayout.CENTER);
+            revalidate();
         }catch (CareSheetResearchException exception){
             JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }

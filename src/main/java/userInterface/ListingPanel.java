@@ -6,8 +6,6 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ListingPanel extends JPanel {
@@ -21,7 +19,6 @@ public class ListingPanel extends JPanel {
     public ListingPanel(){
         controller = new ApplicationController();
         setLayout(new BorderLayout());
-        //panel = new JPanel(new GridLayout(0,4));
         try {
             animalsList = controller.getAllAnimals();
             AnimalTableModel model = new AnimalTableModel(animalsList);

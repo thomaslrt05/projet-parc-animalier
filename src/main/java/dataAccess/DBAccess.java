@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
-import model.Species;
+
 
 public class DBAccess implements DaoAccess{
     private Connection connection;
@@ -207,69 +207,11 @@ public class DBAccess implements DaoAccess{
 
     public void deleteAnimal(String code) throws DeleteAnimalException {
         try {
-            String sqlInstruction = "DELETE FROM preparationsheet WHERE detail IN \n" +
-                    "(SELECT idCare FROM treatment WHERE date IN \n" +
-                    "(SELECT date FROM caresheet WHERE animal = ?));";
-
+            String sqlInstruction = "DELETE FROM animal\n" +
+                    "WHERE code = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, code);
             preparedStatement.executeUpdate();
-
-
-            sqlInstruction = "DELETE FROM preparationsheet\n" +
-                    "WHERE attachment IN (\n" +
-                    "    SELECT code FROM animal\n" +
-                    "    WHERE code = ? \n" +
-                    ");";
-            preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setString(1, code);
-            preparedStatement.executeUpdate();
-
-
-            sqlInstruction = "DELETE FROM treatment\n" +
-                    "WHERE animal IN (\n" +
-                    "    SELECT code FROM animal\n" +
-                    "    WHERE code = ? \n" +
-                    ");";
-            preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setString(1, code);
-            preparedStatement.executeUpdate();
-
-            sqlInstruction = "DELETE FROM remark\n" +
-                    "WHERE animal IN (\n" +
-                    "    SELECT code FROM animal\n" +
-                    "    WHERE code = ?\n" +
-                    ");";
-            preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setString(1, code);
-            preparedStatement.executeUpdate();
-
-            sqlInstruction = "DELETE FROM modification\n" +
-                    "WHERE animal IN (\n" +
-                    "    SELECT code FROM animal\n" +
-                    "    WHERE code = ? \n" +
-                    ");";
-            preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setString(1, code);
-            preparedStatement.executeUpdate();
-
-
-            sqlInstruction = "DELETE FROM caresheet\n" +
-                    "WHERE animal IN (\n" +
-                    "    SELECT code FROM animal\n" +
-                    "    WHERE code = ? \n" +
-                    ");\n";
-            preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setString(1, code);
-            preparedStatement.executeUpdate();
-
-
-            sqlInstruction = "DELETE FROM animal\n" +
-                    "WHERE code = ?;";
-            preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setString(1, code);
-            preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             String message = "Impossible de supprimer cet animal";
             throw new DeleteAnimalException(message);

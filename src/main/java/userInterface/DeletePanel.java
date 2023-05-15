@@ -1,6 +1,5 @@
 package userInterface;
 
-import Exceptions.CareSheetResearchException;
 import model.*;
 import controller.*;
 import Exceptions.*;
@@ -24,24 +23,23 @@ public class DeletePanel extends JPanel implements ActionListener {
         animalList = new ArrayList<>();
         try {
             animalList = controller.getAllAnimals();
+            setLayout(new BorderLayout());
+            panel = new JPanel(new GridLayout(0,4));
+            animalLabel = new JLabel("Animal : ");
+            panel.add(animalLabel);
+
+            comboBox = new JComboBox<>();
+            for (Animal animal: animalList) {
+                comboBox.addItem(animal);
+            }
+            panel.add(comboBox);
+            button = new JButton("Supprimer");
+            button.addActionListener(this);
+            panel.add(button);
+            add(panel,BorderLayout.NORTH);
         }catch (GetAllAnimalsException exception){
             JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
-
-        setLayout(new BorderLayout());
-        panel = new JPanel(new GridLayout(0,4));
-        animalLabel = new JLabel("Animal : ");
-        panel.add(animalLabel);
-
-        comboBox = new JComboBox<>();
-        for (Animal animal: animalList) {
-            comboBox.addItem(animal);
-        }
-        panel.add(comboBox);
-        button = new JButton("Supprimer");
-        button.addActionListener(this);
-        panel.add(button);
-        add(panel,BorderLayout.NORTH);
     }
 
     public void actionPerformed(ActionEvent e) {

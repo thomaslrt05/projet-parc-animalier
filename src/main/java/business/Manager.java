@@ -3,7 +3,6 @@ import Exceptions.*;
 import model.*;
 import dataAccess.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Manager {

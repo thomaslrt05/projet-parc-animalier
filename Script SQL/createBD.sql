@@ -12,7 +12,7 @@ CREATE TABLE `breed` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `id_idx` (`specification`),
-  CONSTRAINT `specification` FOREIGN KEY (`specification`) REFERENCES `species` (`id`)
+  CONSTRAINT `specification` FOREIGN KEY (`specification`) REFERENCES `species` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `animal` (
@@ -27,7 +27,7 @@ CREATE TABLE `animal` (
   PRIMARY KEY (`code`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `id_idx` (`breed`),
-  CONSTRAINT `breed` FOREIGN KEY (`breed`) REFERENCES `breed` (`id`)
+  CONSTRAINT `breed` FOREIGN KEY (`breed`) REFERENCES `breed` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `medicine` (
@@ -62,8 +62,8 @@ CREATE TABLE `employee` (
   PRIMARY KEY (`matricule`),
   UNIQUE KEY `matricule_UNIQUE` (`matricule`),
   KEY `position_idx` (`position`),
-  CONSTRAINT `position` FOREIGN KEY (`position`) REFERENCES `fonction` (`id`),
-  CONSTRAINT `supervisor` FOREIGN KEY (`matricule`) REFERENCES `employee` (`matricule`)
+  CONSTRAINT `position` FOREIGN KEY (`position`) REFERENCES `fonction` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `supervisor` FOREIGN KEY (`matricule`) REFERENCES `employee` (`matricule`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `caresheet` (
@@ -73,7 +73,7 @@ CREATE TABLE `caresheet` (
   PRIMARY KEY (`animal`,`date`),
   KEY `animal_idx` (`animal`),
   KEY `date_idx` (`date`),
-  CONSTRAINT `animal` FOREIGN KEY (`animal`) REFERENCES `animal` (`code`)
+  CONSTRAINT `animal` FOREIGN KEY (`animal`) REFERENCES `animal` (`code`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `treatment` (
@@ -87,9 +87,9 @@ CREATE TABLE `treatment` (
   KEY `date_idx` (`date`),
   KEY `animal_idx` (`animal`),
   KEY `classification_idx` (`classification`),
-  CONSTRAINT `fk_animal_treatment` FOREIGN KEY (`animal`) REFERENCES `caresheet` (`animal`),
-  CONSTRAINT `fk_classification_treatment` FOREIGN KEY (`classification`) REFERENCES `typeofcare` (`id`),
-  CONSTRAINT `fk_date_treatment` FOREIGN KEY (`date`) REFERENCES `caresheet` (`date`)
+  CONSTRAINT `fk_animal_treatment` FOREIGN KEY (`animal`) REFERENCES `caresheet` (`animal`) ON DELETE CASCADE,
+  CONSTRAINT `fk_classification_treatment` FOREIGN KEY (`classification`) REFERENCES `typeofcare` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_date_treatment` FOREIGN KEY (`date`) REFERENCES `caresheet` (`date`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `remark` (
@@ -104,9 +104,9 @@ CREATE TABLE `remark` (
   KEY `animal_idx` (`animal`),
   KEY `date_idx` (`date`),
   KEY `author_idx` (`author`),
-  CONSTRAINT `fk_remark_animal` FOREIGN KEY (`animal`) REFERENCES `caresheet` (`animal`),
-  CONSTRAINT `fk_remark_author` FOREIGN KEY (`author`) REFERENCES `employee` (`matricule`),
-  CONSTRAINT `fk_remark_date` FOREIGN KEY (`date`) REFERENCES `caresheet` (`date`)
+  CONSTRAINT `fk_remark_animal` FOREIGN KEY (`animal`) REFERENCES `caresheet` (`animal`) ON DELETE CASCADE,
+  CONSTRAINT `fk_remark_author` FOREIGN KEY (`author`) REFERENCES `employee` (`matricule`) ON DELETE CASCADE,
+  CONSTRAINT `fk_remark_date` FOREIGN KEY (`date`) REFERENCES `caresheet` (`date`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `modification` (
@@ -116,9 +116,9 @@ CREATE TABLE `modification` (
   PRIMARY KEY (`date`,`animal`,`employee`),
   KEY `fk_animal_modification_idx` (`animal`),
   KEY `fk_employeel_modification_idx` (`employee`),
-  CONSTRAINT `fk_animal_modification` FOREIGN KEY (`animal`) REFERENCES `caresheet` (`animal`),
-  CONSTRAINT `fk_date_modification` FOREIGN KEY (`date`) REFERENCES `caresheet` (`date`),
-  CONSTRAINT `fk_employeel_modification` FOREIGN KEY (`employee`) REFERENCES `employee` (`matricule`)
+  CONSTRAINT `fk_animal_modification` FOREIGN KEY (`animal`) REFERENCES `caresheet` (`animal`) ON DELETE CASCADE,
+  CONSTRAINT `fk_date_modification` FOREIGN KEY (`date`) REFERENCES `caresheet` (`date`) ON DELETE CASCADE,
+  CONSTRAINT `fk_employeel_modification` FOREIGN KEY (`employee`) REFERENCES `employee` (`matricule`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `prescriptionsheet` (
@@ -129,8 +129,8 @@ CREATE TABLE `prescriptionsheet` (
   PRIMARY KEY (`number`),
   KEY `fk_author_prescription_idx` (`author`),
   KEY `fk_prescription_prescription_idx` (`prescription`),
-  CONSTRAINT `fk_author_prescription` FOREIGN KEY (`author`) REFERENCES `employee` (`matricule`),
-  CONSTRAINT `fk_prescription_prescription` FOREIGN KEY (`prescription`) REFERENCES `treatment` (`idCare`)
+  CONSTRAINT `fk_author_prescription` FOREIGN KEY (`author`) REFERENCES `employee` (`matricule`) ON DELETE CASCADE,
+  CONSTRAINT `fk_prescription_prescription` FOREIGN KEY (`prescription`) REFERENCES `treatment` (`idCare`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `preparationsheet` (
@@ -147,8 +147,8 @@ CREATE TABLE `preparationsheet` (
   KEY `fk_attachment_preparation_idx` (`attachment`),
   KEY `fk_detail_preparation_idx` (`detail`),
   KEY `fk_creation_preparation_idx` (`creation`),
-  CONSTRAINT `fk_attachment_preparation` FOREIGN KEY (`attachment`) REFERENCES `animal` (`code`),
-  CONSTRAINT `fk_creation_preparation` FOREIGN KEY (`creation`) REFERENCES `employee` (`matricule`),
-  CONSTRAINT `fk_detail_preparation` FOREIGN KEY (`detail`) REFERENCES `prescriptionsheet` (`number`),
-  CONSTRAINT `fk_preparation_preparation` FOREIGN KEY (`preparation`) REFERENCES `medicine` (`name`)
+  CONSTRAINT `fk_attachment_preparation` FOREIGN KEY (`attachment`) REFERENCES `animal` (`code`) ON DELETE CASCADE,
+  CONSTRAINT `fk_creation_preparation` FOREIGN KEY (`creation`) REFERENCES `employee` (`matricule`) ON DELETE CASCADE,
+  CONSTRAINT `fk_detail_preparation` FOREIGN KEY (`detail`) REFERENCES `prescriptionsheet` (`number`) ON DELETE CASCADE,
+  CONSTRAINT `fk_preparation_preparation` FOREIGN KEY (`preparation`) REFERENCES `medicine` (`name`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;

@@ -1,12 +1,9 @@
 package userInterface;
 
-import com.sun.jdi.connect.spi.Connection;
-import dataAccess.SingletonConnexion;
-import model.*;
+
 import controller.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

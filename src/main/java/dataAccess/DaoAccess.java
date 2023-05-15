@@ -1,12 +1,8 @@
 package dataAccess;
 
-import Exceptions.AddAnimalException;
+
 import model.*;
 import Exceptions.*;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface DaoAccess {
