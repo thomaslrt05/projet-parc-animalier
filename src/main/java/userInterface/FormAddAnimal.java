@@ -72,14 +72,10 @@ public class FormAddAnimal extends JPanel implements ActionListener{
             sexPanel.add(sexMaleButton);
             sexPanel.add(sexFemaleButton);
 
-
-
-
             weightLabel = new JLabel("Poids * :");
             weightField = new JTextField(10);
             formPanel.add(weightLabel);
             formPanel.add(weightField);
-
 
             isDangerousLabel = new JLabel("Est-il dangereux ?");
             isDangerousBox = new JCheckBox();
@@ -94,8 +90,6 @@ public class FormAddAnimal extends JPanel implements ActionListener{
             }
             formPanel.add(speciesLabel);
             formPanel.add(speciesCombo);
-
-
 
             submitButton = new JButton("Ajouter");
             cancelButton = new JButton("Annuler");
@@ -124,7 +118,6 @@ public class FormAddAnimal extends JPanel implements ActionListener{
                 JOptionPane.showMessageDialog(null, exception.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
             String breed = breedSelected.getId();
-
 
             Boolean isDangerous = isDangerousBox.isSelected();
             String weightInformation = weightField.getText();
