@@ -17,9 +17,10 @@ public class ListingPanel extends JPanel {
     private JTable jTable;
     private JScrollPane scrollPanel;
     public ListingPanel(){
-        controller = new ApplicationController();
-        setLayout(new BorderLayout());
+
         try {
+            controller = new ApplicationController();
+            setLayout(new BorderLayout());
             animalsList = controller.getAllAnimals();
             AnimalTableModel model = new AnimalTableModel(animalsList);
             jTable = new JTable(model);
@@ -29,7 +30,7 @@ public class ListingPanel extends JPanel {
             add(scrollPanel, BorderLayout.CENTER);
             revalidate();
             repaint();
-        }catch (GetAllAnimalsException exception){
+        }catch (GetAllAnimalsException | SingletonConnexionException exception){
             JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
     }

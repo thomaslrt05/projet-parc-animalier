@@ -26,89 +26,89 @@ public class FormAddAnimal extends JPanel implements ActionListener{
 
 
     public FormAddAnimal()  {
-        controller = new ApplicationController();
-        setLayout(new BorderLayout());
-
-        JPanel formPanel = new JPanel(new GridLayout(0, 2));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        codeLabel = new JLabel("Code :");
-        codeField = new JTextField(20);
-        formPanel.add(codeLabel);
-        formPanel.add(codeField);
-
-        nameLabel = new JLabel("Nom :");
-        nameField = new JTextField(20);
-        formPanel.add(nameLabel);
-        formPanel.add(nameField);
-
-        nickNameLabel = new JLabel("Surnom :");
-        nickNameField = new JTextField(20);
-        formPanel.add(nickNameLabel);
-        formPanel.add(nickNameField);
-
-        arrivalDateLabel = new JLabel("Date d'arrivé : ");
-        model = new SpinnerDateModel();
-        spinner = new JSpinner(model);
-        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "dd.MM.yyyy");
-        DateFormatter formatter = (DateFormatter)editor.getTextField().getFormatter();
-        formatter.setAllowsInvalid(false);
-        formatter.setOverwriteMode(true);
-        formPanel.add(arrivalDateLabel);
-        formPanel.add(spinner);
-
-        sexMaleButton = new JRadioButton("Mâle");
-        sexFemaleButton = new JRadioButton("Female");
-        ButtonGroup groupSex = new ButtonGroup();
-        groupSex.add(sexMaleButton);
-        sexMaleButton.setSelected(true);
-        groupSex.add(sexFemaleButton);
-        sexLabel = new JLabel("Sexe :");
-
-        JPanel sexPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        formPanel.add(sexLabel);
-        formPanel.add(sexPanel);
-        sexPanel.add(sexMaleButton);
-        sexPanel.add(sexFemaleButton);
-
-
-
-
-        weightLabel = new JLabel("Poids :");
-        weightField = new JTextField(10);
-        formPanel.add(weightLabel);
-        formPanel.add(weightField);
-
-
-        isDangerousLabel = new JLabel("Est-il dangereux ?");
-        isDangerousBox = new JCheckBox();
-        formPanel.add(isDangerousLabel);
-        formPanel.add(isDangerousBox);
-
-        speciesLabel = new JLabel("Espèce : ");
-        speciesCombo = new JComboBox<>();
-
         try {
+            controller = new ApplicationController();
+            setLayout(new BorderLayout());
+
+            JPanel formPanel = new JPanel(new GridLayout(0, 2));
+            formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            codeLabel = new JLabel("Code * :");
+            codeField = new JTextField(20);
+            formPanel.add(codeLabel);
+            formPanel.add(codeField);
+
+            nameLabel = new JLabel("Nom * :");
+            nameField = new JTextField(20);
+            formPanel.add(nameLabel);
+            formPanel.add(nameField);
+
+            nickNameLabel = new JLabel("Surnom :");
+            nickNameField = new JTextField(20);
+            formPanel.add(nickNameLabel);
+            formPanel.add(nickNameField);
+
+            arrivalDateLabel = new JLabel("Date d'arrivé * : ");
+            model = new SpinnerDateModel();
+            spinner = new JSpinner(model);
+            JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "dd.MM.yyyy");
+            DateFormatter formatter = (DateFormatter)editor.getTextField().getFormatter();
+            formatter.setAllowsInvalid(false);
+            formatter.setOverwriteMode(true);
+            formPanel.add(arrivalDateLabel);
+            formPanel.add(spinner);
+
+            sexMaleButton = new JRadioButton("Mâle");
+            sexFemaleButton = new JRadioButton("Female");
+            ButtonGroup groupSex = new ButtonGroup();
+            groupSex.add(sexMaleButton);
+            sexMaleButton.setSelected(true);
+            groupSex.add(sexFemaleButton);
+            sexLabel = new JLabel("Sexe * :");
+
+            JPanel sexPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            formPanel.add(sexLabel);
+            formPanel.add(sexPanel);
+            sexPanel.add(sexMaleButton);
+            sexPanel.add(sexFemaleButton);
+
+
+
+
+            weightLabel = new JLabel("Poids * :");
+            weightField = new JTextField(10);
+            formPanel.add(weightLabel);
+            formPanel.add(weightField);
+
+
+            isDangerousLabel = new JLabel("Est-il dangereux ?");
+            isDangerousBox = new JCheckBox();
+            formPanel.add(isDangerousLabel);
+            formPanel.add(isDangerousBox);
+
+            speciesLabel = new JLabel("Espèce * : ");
+            speciesCombo = new JComboBox<>();
             speciesList = controller.listSpecies();
             for (Species species: speciesList) {
                 speciesCombo.addItem(species);
             }
-        }catch (ListSpeciesException e){
+            formPanel.add(speciesLabel);
+            formPanel.add(speciesCombo);
+
+
+
+            submitButton = new JButton("Ajouter");
+            cancelButton = new JButton("Annuler");
+            submitButton.addActionListener(this);
+            cancelButton.addActionListener(this);
+
+            formPanel.add(submitButton);
+            formPanel.add(cancelButton);
+            add(formPanel, BorderLayout.CENTER);
+        }catch (ListSpeciesException | SingletonConnexionException e){
             JOptionPane.showMessageDialog(null,e.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
-        formPanel.add(speciesLabel);
-        formPanel.add(speciesCombo);
 
-
-
-        submitButton = new JButton("Ajouter");
-        cancelButton = new JButton("Annuler");
-        submitButton.addActionListener(this);
-        cancelButton.addActionListener(this);
-
-        formPanel.add(submitButton);
-        formPanel.add(cancelButton);
-        add(formPanel, BorderLayout.CENTER);
     }
 
     public void actionPerformed(ActionEvent e) {

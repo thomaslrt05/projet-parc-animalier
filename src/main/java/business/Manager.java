@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Manager {
     private DBAccess dao;
 
-    public Manager() {
+    public Manager() throws SingletonConnexionException {
         this.dao = new DBAccess();
     }
 

@@ -31,9 +31,10 @@ public class ModifyPanel extends JPanel implements ActionListener{
     private Species currentSpecies,matchingSpecies;
 
     public ModifyPanel(){
-        controller = new ApplicationController();
-        animalList = new ArrayList<>();
+
         try {
+            controller = new ApplicationController();
+            animalList = new ArrayList<>();
             animalList = controller.getAllAnimals();
             setLayout(new BorderLayout());
             panel = new JPanel(new GridLayout(0,4));
@@ -49,7 +50,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
             button.addActionListener(this);
             panel.add(button);
             add(panel,BorderLayout.NORTH);
-        }catch (GetAllAnimalsException exception){
+        }catch (GetAllAnimalsException | SingletonConnexionException exception){
             JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -66,7 +67,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
 
             currentCode = selectedAnimal.getCode();
 
-            nameLabel = new JLabel("Nom :");
+            nameLabel = new JLabel("Nom * :");
             nameField = new JTextField(20);
             nameField.setText(selectedAnimal.getName());
             formPanel.add(nameLabel);
@@ -78,8 +79,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
             formPanel.add(nickNameLabel);
             formPanel.add(nickNameField);
 
-
-            arrivalDateLabel = new JLabel("Date d'arrivé : ");
+            arrivalDateLabel = new JLabel("Date d'arrivé * : ");
             model = new SpinnerDateModel();
             model.setValue(selectedAnimal.getArrivalDate());
             spinner = new JSpinner(model);
@@ -98,7 +98,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
             if(selectedAnimal.getSex() == Gender.M) {
                 sexMaleButton.setSelected(true);
             }else sexFemaleButton.setSelected(true);
-            sexLabel = new JLabel("Sexe :");
+            sexLabel = new JLabel("Sexe * :");
 
             JPanel sexPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             formPanel.add(sexLabel);
@@ -106,13 +106,11 @@ public class ModifyPanel extends JPanel implements ActionListener{
             sexPanel.add(sexMaleButton);
             sexPanel.add(sexFemaleButton);
 
-
-            weightLabel = new JLabel("Poids :");
+            weightLabel = new JLabel("Poids * :");
             weightField = new JTextField(10);
             weightField.setText(Double.toString(selectedAnimal.getWeight()));
             formPanel.add(weightLabel);
             formPanel.add(weightField);
-
 
             isDangerousLabel = new JLabel("Est-il dangereux ?");
             isDangerousBox = new JCheckBox();
@@ -120,7 +118,7 @@ public class ModifyPanel extends JPanel implements ActionListener{
             formPanel.add(isDangerousLabel);
             formPanel.add(isDangerousBox);
 
-            speciesLabel = new JLabel("Espèce : ");
+            speciesLabel = new JLabel("Espèce * : ");
             speciesCombo = new JComboBox<>();
             try {
                 speciesList = controller.listSpecies();
@@ -140,7 +138,6 @@ public class ModifyPanel extends JPanel implements ActionListener{
 
                     formPanel.add(speciesLabel);
                     formPanel.add(speciesCombo);
-
 
                     submitButton = new JButton("Modifier");
                     cancelButton = new JButton("Annuler");
@@ -175,8 +172,6 @@ public class ModifyPanel extends JPanel implements ActionListener{
             String weightInformation = weightField.getText();
             Date arrivalDate = model.getDate();
             String nickName = nickNameField.getText();
-
-
 
             Animal animalModified;
             double weight = 0;

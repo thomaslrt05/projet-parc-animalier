@@ -9,7 +9,7 @@ public class ApplicationController {
 
     private Manager manager;
 
-    public ApplicationController()  {
+    public ApplicationController() throws SingletonConnexionException {
         this.manager = new Manager();
     }
 

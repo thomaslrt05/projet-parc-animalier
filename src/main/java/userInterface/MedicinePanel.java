@@ -24,10 +24,11 @@ public class MedicinePanel extends JPanel implements ActionListener {
     private JScrollPane scrollPanel;
 
     public MedicinePanel() {
-        controller = new ApplicationController();
 
-        medicinesList = new ArrayList<>();
         try {
+            controller = new ApplicationController();
+
+            medicinesList = new ArrayList<>();
             medicinesList = controller.listMedicine();
             data = new ArrayList<>();
 
@@ -45,7 +46,7 @@ public class MedicinePanel extends JPanel implements ActionListener {
             button.addActionListener(this);
             panel.add(button);
             add(panel,BorderLayout.NORTH);
-        }catch (ListMedicineException e){
+        }catch (ListMedicineException | SingletonConnexionException e){
             JOptionPane.showMessageDialog(null,e.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
     }

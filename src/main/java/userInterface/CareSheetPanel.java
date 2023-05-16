@@ -23,32 +23,31 @@ public class CareSheetPanel extends JPanel implements ActionListener {
     private JScrollPane scrollPanel;
 
     public CareSheetPanel() {
-        controller = new ApplicationController();
 
-        speciesList = new ArrayList<>();
         try {
+            controller = new ApplicationController();
+            speciesList = new ArrayList<>();
             speciesList = controller.listSpecies();
-        }catch (ListSpeciesException e){
+
+            data = new ArrayList<>();
+
+            setLayout(new BorderLayout());
+            panel = new JPanel(new GridLayout(0,4));
+            speciesLabel = new JLabel("Espèces :");
+            panel.add(speciesLabel);
+
+            comboBox = new JComboBox<>();
+            for (Species species: speciesList) {
+                comboBox.addItem(species);
+            }
+            panel.add(comboBox);
+            button = new JButton("Recherche");
+            button.addActionListener(this);
+            panel.add(button);
+            add(panel,BorderLayout.NORTH);
+        }catch (ListSpeciesException | SingletonConnexionException e){
             JOptionPane.showMessageDialog(null,e.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
-
-        data = new ArrayList<>();
-
-        setLayout(new BorderLayout());
-        panel = new JPanel(new GridLayout(0,4));
-        speciesLabel = new JLabel("Espèces :");
-        panel.add(speciesLabel);
-
-        comboBox = new JComboBox<>();
-        for (Species species: speciesList) {
-            comboBox.addItem(species);
-        }
-        panel.add(comboBox);
-        button = new JButton("Recherche");
-        button.addActionListener(this);
-        panel.add(button);
-        add(panel,BorderLayout.NORTH);
-
     }
     public void actionPerformed(ActionEvent e) {
         if(jTable != null){

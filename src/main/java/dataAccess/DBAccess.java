@@ -2,6 +2,7 @@ package dataAccess;
 import model.*;
 import Exceptions.*;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +13,8 @@ import java.sql.Date;
 
 public class DBAccess implements DaoAccess{
     private Connection connection;
-    public DBAccess()  {
-        this.connection = SingletonConnexion.getInstance();
+    public DBAccess() throws SingletonConnexionException{
+            this.connection = SingletonConnexion.getInstance();
     }
 
 
@@ -271,7 +272,6 @@ public class DBAccess implements DaoAccess{
 
             while (data.next()) {
                 if (!data.wasNull()) {
-                    // TODO
                     Fonction fonction = new Fonction(data.getString("id"), EnumRank.valueOf(data.getString("position")), data.getString("label"));
                     listOfFonctions.add(fonction);
                 }

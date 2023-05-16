@@ -19,9 +19,10 @@ public class DeletePanel extends JPanel implements ActionListener {
     private JButton button;
 
     public DeletePanel(){
-        controller = new ApplicationController();
-        animalList = new ArrayList<>();
+
         try {
+            controller = new ApplicationController();
+            animalList = new ArrayList<>();
             animalList = controller.getAllAnimals();
             setLayout(new BorderLayout());
             panel = new JPanel(new GridLayout(0,4));
@@ -37,7 +38,7 @@ public class DeletePanel extends JPanel implements ActionListener {
             button.addActionListener(this);
             panel.add(button);
             add(panel,BorderLayout.NORTH);
-        }catch (GetAllAnimalsException exception){
+        }catch (GetAllAnimalsException | SingletonConnexionException exception){
             JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
     }

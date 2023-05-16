@@ -23,33 +23,35 @@ public class RemarkPanel extends JPanel implements ActionListener {
     private JScrollPane scrollPanel;
 
     public RemarkPanel() {
-        controller = new ApplicationController();
 
-        fonctions = new ArrayList<>();
 
        try {
+           controller = new ApplicationController();
+
+           fonctions = new ArrayList<>();
            fonctions = controller.listFonctions();
-       }catch (ListFonctionsException exception){
+           data = new ArrayList<>();
+
+           setLayout(new BorderLayout());
+           panel = new JPanel(new GridLayout(0,4));
+           fonctionLabel = new JLabel("Fonctions:");
+           panel.add(fonctionLabel);
+
+           comboBox = new JComboBox<>();
+           for (Fonction fonction: fonctions) {
+               comboBox.addItem(fonction);
+           }
+
+           panel.add(comboBox);
+           button = new JButton("Recherche");
+           button.addActionListener(this);
+           panel.add(button);
+           add(panel,BorderLayout.NORTH);
+       }catch (ListFonctionsException | SingletonConnexionException exception){
            JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
        }
 
-        data = new ArrayList<>();
 
-        setLayout(new BorderLayout());
-        panel = new JPanel(new GridLayout(0,4));
-        fonctionLabel = new JLabel("Fonctions:");
-        panel.add(fonctionLabel);
-
-        comboBox = new JComboBox<>();
-        for (Fonction fonction: fonctions) {
-            comboBox.addItem(fonction);
-        }
-
-        panel.add(comboBox);
-        button = new JButton("Recherche");
-        button.addActionListener(this);
-        panel.add(button);
-        add(panel,BorderLayout.NORTH);
 
     }
     public void actionPerformed(ActionEvent e) {

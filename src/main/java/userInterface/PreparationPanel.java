@@ -25,28 +25,30 @@ public class PreparationPanel extends JPanel implements ActionListener{
     private JTable jTable;
     private JScrollPane scrollPanel;
     public PreparationPanel(){
-        controller = new ApplicationController();
-        speciesList = new ArrayList<>();
+
         try {
+            controller = new ApplicationController();
+            speciesList = new ArrayList<>();
             speciesList = controller.listSpecies();
-        }catch (ListSpeciesException exception){
+            animalsList = new ArrayList<>();
+            setLayout(new BorderLayout());
+            panel = new JPanel(new GridLayout(0,4));
+            speciesLabel = new JLabel("Espèce : ");
+            panel.add(speciesLabel);
+
+            speciesJComboBoxBox = new JComboBox<>();
+            for (Species species : speciesList){
+                speciesJComboBoxBox.addItem(species);
+            }
+            panel.add(speciesJComboBoxBox);
+            buttonSearch = new JButton("Rechercher");
+            buttonSearch.addActionListener(this);
+            panel.add(buttonSearch);
+            add(panel,BorderLayout.NORTH);
+        }catch (ListSpeciesException | SingletonConnexionException exception){
             JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
-        animalsList = new ArrayList<>();
-        setLayout(new BorderLayout());
-        panel = new JPanel(new GridLayout(0,4));
-        speciesLabel = new JLabel("Espèce : ");
-        panel.add(speciesLabel);
 
-        speciesJComboBoxBox = new JComboBox<>();
-        for (Species species : speciesList){
-            speciesJComboBoxBox.addItem(species);
-        }
-        panel.add(speciesJComboBoxBox);
-        buttonSearch = new JButton("Rechercher");
-        buttonSearch.addActionListener(this);
-        panel.add(buttonSearch);
-        add(panel,BorderLayout.NORTH);
     }
 
 
