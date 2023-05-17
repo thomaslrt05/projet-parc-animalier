@@ -6,10 +6,15 @@ import dataAccess.*;
 import java.util.ArrayList;
 
 public class Manager {
-    private DBAccess dao;
+    private DaoAccess dao;
+
 
     public Manager() throws SingletonConnexionException {
-        this.dao = new DBAccess();
+        setDao(new DBAccess());
+    }
+
+    public void setDao(DBAccess dao){
+        this.dao = dao;
     }
 
     public void addAnimal(Animal animal) throws AddAnimalException {
@@ -23,7 +28,9 @@ public class Manager {
         return dao.remarkByFonctions(fonction);
     }
 
-    public ArrayList<TreatmentByMedicine> treatmentByMedicineResearch (String name) throws MedecineResearchException{
+    public ArrayList<TreatmentByMedicine> treatmentByMedicineResearch (String name) throws MedecineResearchException,EmptyNameException{
+        String message = "Aucun nom a été detecté dans les paramètres";
+        if(name == null) throw new EmptyNameException(message);
         return dao.treatmentByMedicineResearch(name);
     }
 

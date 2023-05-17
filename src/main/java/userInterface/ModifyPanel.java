@@ -182,85 +182,87 @@ public class ModifyPanel extends JPanel implements ActionListener{
                 if (!name.matches("[\\p{L}]+")) {
                     JOptionPane.showMessageDialog(null, "Le nom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }else {
-
                     if(weightInformation.isEmpty()) {
                         JOptionPane.showMessageDialog(null,"Le poids ne doit pas être vide","Erreur",JOptionPane.ERROR_MESSAGE);
                     }else {
                         if (!weightInformation.matches("-?\\d+(\\.\\d+)?")) {
                             JOptionPane.showMessageDialog(null, "Le champ poids doit contenir seulement des chiffres.","Erreur",JOptionPane.ERROR_MESSAGE);
                         }else {
-                            weight = Double.parseDouble(weightInformation);
-                            if (weight < 0) {
-                                JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
+                            if(weightInformation.length() > 10){
+                            JOptionPane.showMessageDialog(null,"Le poids ne doit pas dépasser 10 chiffres","Erreur",JOptionPane.ERROR_MESSAGE);
                             }else {
-
-                                Date now = new Date();
-                                if (arrivalDate.after(now)) {
-                                    JOptionPane.showMessageDialog(null, "La date d'arrivée doit être antérieure ou égale à la date courante.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                weight = Double.parseDouble(weightInformation);
+                                if (weight < 0) {
+                                    JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
                                 }else {
-                                    if (!nickName.isEmpty()){
-                                        if (nickName.length() > 20) {
-                                            JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
-                                        }else {
-                                            if (!nickName.matches("[\\p{L}]+")) {
-                                                JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                    Date now = new Date();
+                                    if (arrivalDate.after(now)) {
+                                        JOptionPane.showMessageDialog(null, "La date d'arrivée doit être antérieure ou égale à la date courante.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                    }else {
+                                        if (!nickName.isEmpty()){
+                                            if (nickName.length() > 20) {
+                                                JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
                                             }else {
-                                                try {
-                                                    animalModified = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
-                                                    controller.modifyAnimal(animalModified);
-                                                    JOptionPane.showMessageDialog(null,"La modification de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
-                                                    removeAll();
-                                                    add(panel,BorderLayout.NORTH);
-                                                    animalList.clear();
-                                                    comboBox = new JComboBox<>();
+                                                if (!nickName.matches("[\\p{L}]+")) {
+                                                    JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                                }else {
                                                     try {
-                                                        animalList = controller.getAllAnimals();
-                                                    }catch (GetAllAnimalsException exception){
+                                                        animalModified = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                                                        controller.modifyAnimal(animalModified);
+                                                        JOptionPane.showMessageDialog(null,"La modification de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
+                                                        removeAll();
+                                                        add(panel,BorderLayout.NORTH);
+                                                        animalList.clear();
+                                                        comboBox = new JComboBox<>();
+                                                        try {
+                                                            animalList = controller.getAllAnimals();
+                                                        }catch (GetAllAnimalsException exception){
+                                                            JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                                                        }
+                                                        for (Animal animal: animalList) {
+                                                            comboBox.addItem(animal);
+                                                        }
+                                                        panel.add(animalLabel);
+                                                        panel.add(comboBox);
+                                                        panel.add(button);
+                                                        revalidate();
+                                                        repaint();
+                                                    }
+                                                    catch (ModifyAnimalException exception){
                                                         JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                                                     }
-                                                    for (Animal animal: animalList) {
-                                                        comboBox.addItem(animal);
-                                                    }
-                                                    panel.add(animalLabel);
-                                                    panel.add(comboBox);
-                                                    panel.add(button);
-                                                    revalidate();
-                                                    repaint();
                                                 }
-                                                catch (ModifyAnimalException exception){
+                                            }
+
+                                        }else {
+                                            try {
+                                                animalModified = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed);
+                                                controller.modifyAnimal(animalModified);
+                                                JOptionPane.showMessageDialog(null,"La modification de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
+                                                removeAll();
+                                                add(panel,BorderLayout.NORTH);
+                                                animalList.clear();
+                                                comboBox = new JComboBox<>();
+                                                try {
+                                                    animalList = controller.getAllAnimals();
+                                                }catch (GetAllAnimalsException exception){
                                                     JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                                                 }
+                                                for (Animal animal: animalList) {
+                                                    comboBox.addItem(animal);
+                                                }
+                                                panel.add(animalLabel);
+                                                panel.add(comboBox);
+                                                panel.add(button);
+                                                revalidate();
+                                                repaint();
                                             }
-                                        }
-
-                                    }else {
-                                        try {
-                                            animalModified = new Animal(currentCode,name,arrivalDate,sex,isDangerous,weight,breed);
-                                            controller.modifyAnimal(animalModified);
-                                            JOptionPane.showMessageDialog(null,"La modification de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
-                                            removeAll();
-                                            add(panel,BorderLayout.NORTH);
-                                            animalList.clear();
-                                            comboBox = new JComboBox<>();
-                                            try {
-                                                animalList = controller.getAllAnimals();
-                                            }catch (GetAllAnimalsException exception){
+                                            catch (ModifyAnimalException exception){
                                                 JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                                             }
-                                            for (Animal animal: animalList) {
-                                                comboBox.addItem(animal);
-                                            }
-                                            panel.add(animalLabel);
-                                            panel.add(comboBox);
-                                            panel.add(button);
-                                            revalidate();
-                                            repaint();
                                         }
-                                        catch (ModifyAnimalException exception){
-                                            JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
-                                        }
-                                    }
 
+                                    }
                                 }
                             }
                         }

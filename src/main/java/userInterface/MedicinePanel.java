@@ -68,10 +68,8 @@ public class MedicinePanel extends JPanel implements ActionListener {
             scrollPanel = new JScrollPane (jTable);
             this.add(scrollPanel, BorderLayout.CENTER);
             this.revalidate();
-        }catch (MedecineResearchException exception){
+        }catch (MedecineResearchException | EmptyNameException exception){
             JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
         }
-
-
     }
 }

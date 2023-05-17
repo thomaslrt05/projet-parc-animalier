@@ -137,6 +137,7 @@ public class FormAddAnimal extends JPanel implements ActionListener{
             }catch (AnimalExistsException exception){
                 JOptionPane.showMessageDialog(null, exception.getMessage(), "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
             }
+
             if(codeAlreadyUse){
                 JOptionPane.showMessageDialog(null,"Le code unique est déjà utilisé par un autre animal.","Erreur",JOptionPane.ERROR_MESSAGE);
             }else {
@@ -154,23 +155,42 @@ public class FormAddAnimal extends JPanel implements ActionListener{
                             }else {
                                 if (!weightInformation.matches("-?\\d+(\\.\\d+)?")) {
                                     JOptionPane.showMessageDialog(null, "Le champ poids doit contenir seulement des chiffres.","Erreur",JOptionPane.ERROR_MESSAGE);
-                                }else {
-                                    weight = Double.parseDouble(weightInformation);
-                                    if (weight < 0) {
-                                        JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
-                                    }else {
-                                        Date now = new Date();
-                                        if (arrivalDate.after(now)) {
-                                            JOptionPane.showMessageDialog(null, "La date d'arrivée doit être antérieure ou égale à la date courante.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                                        }else {
-                                            if (!nickName.isEmpty()){
-                                                if (nickName.length() > 20) {
-                                                    JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
-                                                }else if (!nickName.matches("[\\p{L}]+")) {
-                                                    JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                } else {
+                                    if (weightInformation.length() > 10) {
+                                        JOptionPane.showMessageDialog(null,"Le poids ne doit pas dépasser 10 chiffres","Erreur",JOptionPane.ERROR_MESSAGE);
+                                    } else {
+                                        weight = Double.parseDouble(weightInformation);
+                                        if (weight < 0 ) {
+                                            JOptionPane.showMessageDialog(null,"Le poids doit être positif","Erreur",JOptionPane.ERROR_MESSAGE);
+                                        } else {
+                                            Date now = new Date();
+                                            if (arrivalDate.after(now)) {
+                                                JOptionPane.showMessageDialog(null, "La date d'arrivée doit être antérieure ou égale à la date courante.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                            } else {
+                                                if (!nickName.isEmpty()) {
+                                                    if (nickName.length() > 20) {
+                                                        JOptionPane.showMessageDialog(null,"Le nom doit contenir entre 1 et 20 caractères.","Erreur",JOptionPane.ERROR_MESSAGE);
+                                                    } else if (!nickName.matches("[\\p{L}]+")) {
+                                                        JOptionPane.showMessageDialog(null, "Le surnom doit contenir uniquement des lettres.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                                    } else {
+                                                        try {
+                                                            newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                                                            controller.addAnimal(newAnimal);
+                                                            codeField.setText("");
+                                                            nameField.setText("");
+                                                            weightField.setText("");
+                                                            sexFemaleButton.setSelected(false);
+                                                            sexMaleButton.setSelected(true);
+                                                            nickNameField.setText("");
+                                                            JOptionPane.showMessageDialog(null,"L'ajout de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
+                                                            revalidate();
+                                                        } catch (AddAnimalException exception) {
+                                                            JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                                                        }
+                                                    }
                                                 } else {
                                                     try {
-                                                        newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed,nickName);
+                                                        newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed);
                                                         controller.addAnimal(newAnimal);
                                                         codeField.setText("");
                                                         nameField.setText("");
@@ -180,33 +200,15 @@ public class FormAddAnimal extends JPanel implements ActionListener{
                                                         nickNameField.setText("");
                                                         JOptionPane.showMessageDialog(null,"L'ajout de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
                                                         revalidate();
-                                                    }catch (AddAnimalException exception){
+                                                    } catch (AddAnimalException exception) {
                                                         JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                                                     }
-
                                                 }
                                             }
-                                            else {
-                                                try {
-                                                    newAnimal = new Animal(code,name,arrivalDate,sex,isDangerous,weight,breed);
-                                                    controller.addAnimal(newAnimal);
-                                                    codeField.setText("");
-                                                    nameField.setText("");
-                                                    weightField.setText("");
-                                                    sexFemaleButton.setSelected(false);
-                                                    sexMaleButton.setSelected(true);
-                                                    nickNameField.setText("");
-                                                    JOptionPane.showMessageDialog(null,"L'ajout de l'animal a été effectué","Réussite",JOptionPane.INFORMATION_MESSAGE);
-                                                    revalidate();
-                                                }
-                                                catch (AddAnimalException exception){
-                                                    JOptionPane.showMessageDialog(null,exception.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
-                                                }
-                                            }
-
                                         }
                                     }
                                 }
+
                             }
                         }
                     }

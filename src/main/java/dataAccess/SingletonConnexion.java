@@ -14,6 +14,7 @@ public class SingletonConnexion {
             try {
                 uniqueInstance = DriverManager.getConnection("jdbc:mysql://localhost:3306/parc-animalier", "root", "rootroot2023.");
             } catch (SQLException e) {
+                System.out.println(e.getMessage());
                 String message =  "Erreur lors de l'ouverture de la connection";
                 throw new SingletonConnexionException(message);
             }

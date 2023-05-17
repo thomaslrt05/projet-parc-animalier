@@ -25,7 +25,7 @@ public class ApplicationController {
         return manager.remarkByFonctions(fonction);
     }
 
-    public ArrayList<TreatmentByMedicine> treatmentByMedicineResearch (String name) throws MedecineResearchException {
+    public ArrayList<TreatmentByMedicine> treatmentByMedicineResearch (String name) throws MedecineResearchException, EmptyNameException {
         return manager.treatmentByMedicineResearch(name);
     }
 
