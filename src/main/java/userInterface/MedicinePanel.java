@@ -1,7 +1,5 @@
 package userInterface;
 
-
-
 import model.*;
 import controller.*;
 import Exceptions.*;

@@ -2,7 +2,6 @@ package dataAccess;
 import model.*;
 import Exceptions.*;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
